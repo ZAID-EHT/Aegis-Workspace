@@ -37,9 +37,24 @@ ROLE_DISCIPLINE: Final[dict[str, str]] = {
 DEDUPE_THRESHOLD: Final[float] = 0.75  # cosine similarity -> flag for review
 SIMILARITY_PRECISION: Final[int] = 4  # decimal places reported for cosine similarity
 RARE_SKILL_BONUS: Final[int] = 15  # Priority bump when filling a scarce critical skill
+RARE_SKILL_SCARCITY: Final[int] = 2  # a critical skill is "scarce" if held by <= this many
 
 # ── Phase B — team formation ────────────────────────────────────────────────
 TEAM_SIZE: Final[tuple[int, int]] = (4, 5)  # permitted (min, max)
+# TeamScore components (weights sum to 100 -> score is 0..100). Mirrors the
+# README "Team Score Components" table.
+TEAM_SCORE_WEIGHTS: Final[dict[str, int]] = {
+    "critical": 30,  # critical-skill coverage (Â >= target)
+    "schedule": 20,  # common meeting-slot coverage
+    "role": 15,  # role coverage across members
+    "preference": 15,  # project-preference satisfaction
+    "workload": 10,  # evenness of member capacity
+    "experience": 10,  # closeness to cohort skill level (anti-sandbox)
+}
+# Preference satisfaction by rank index of the assigned project in a student's list.
+PREF_SAT: Final[dict[int, float]] = {0: 1.0, 1: 0.7, 2: 0.4}
+PREF_SAT_DEFAULT: Final[float] = 0.1  # ranked 4th+ or not listed
+MAX_SWAP_ITERATIONS: Final[int] = 100  # local-search safety bound
 
 # ── Phase B — task allocation / utilisation ─────────────────────────────────
 UTIL_TARGET: Final[tuple[float, float]] = (0.7, 1.0)  # target utilisation band

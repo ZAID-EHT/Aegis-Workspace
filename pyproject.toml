@@ -3,11 +3,11 @@ name = "aegis"
 version = "0.1.0"
 description = "AEGIS — evidence-weighted capstone allocation engine (CIPHER 2.0)"
 requires-python = ">=3.13"
-# Engine core is stdlib-only. Heavy deps land in the phase that first needs them:
-#   scikit-learn  -> Phase A dedupe (TF-IDF cosine)
-#   matching      -> Phase B SPA
-#   fastapi/uvicorn -> Phase D API
-dependencies = []
+# fastapi/uvicorn land in Phase D.
+dependencies = [
+    "scikit-learn>=1.6",  # Phase A dedupe (TF-IDF cosine)
+    "matching>=1.4",      # Phase B Abraham–Manlove SPA
+]
 
 [tool.ruff]
 line-length = 100

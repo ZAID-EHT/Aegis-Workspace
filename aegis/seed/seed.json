@@ -1,276 +1,1076 @@
 {
   "_meta": {
-    "note": "Engineered, not random. Each case makes one formula fire visibly. Synthetic PII only.",
+    "note": "Engineered, not random. Each case makes one formula fire visibly. Synthetic PII only. total_hours = current-sprint estimate (not whole project).",
     "engineered_cases": {
-      "c05_hero": "STU_08 declares technical 5/5 with no evidence -> contradicted -> 5x0.5 = 2.5",
-      "duplicate_pair": ["P_02", "P_03"],
-      "ghosting_tier3": "STU_07 authors zero events across all 14 sim-days (pure ghost)",
-      "sympathy_carry": "STU_08 does 0 of his own assigned tasks (T_08a/b/c); STU_01 authors 100% of them (>=0.95). STU_08 is still present via general pings, so he is carried, NOT a ghost.",
+      "duplicate_pair": [
+        "P_02",
+        "P_03"
+      ],
+      "ghosting_tier3": "STU_07 (team P_05) authors zero events across all 14 sim-days (pure ghost)",
+      "sympathy_carry": "STU_05 does 0 of his own assigned tasks (T_05a/b/c); STU_01 (same team P_01) authors 100% of them (>=0.95). STU_05 is present via general pings -> carried, not a ghost.",
       "rare_skill_seed": "STU_03 is the scarce high-confidence UX holder (critical skill on P_04)",
-      "oversubscription": "P_01 capacity 4 but 5 students rank it first (STU_01,02,05,07,08)",
-      "burnout": "STU_01 authors 11 events incl. STU_08's whole workload -> high utilisation, burnout/sympathy tripwire",
-      "p08_filler": "P_08 has no applicants by design - extra abstract so TF-IDF dedupe runs on >8 submissions; it simply forms no team"
+      "oversubscription": "P_01 capacity 4 but 5 students rank it first (STU_01,02,05,07,08) -> 1 cascades to P_05",
+      "burnout": "STU_01 authors 10 events (own + all of STU_05's work) -> high utilisation, burnout/sympathy tripwire. Carrier and carried share team P_01.",
+      "p08_filler": "P_08 has no applicants by design - extra abstract so TF-IDF dedupe runs on >8 submissions; it simply forms no team",
+      "target_teams": "SPA funnels into 3 full teams of 4: P_01 (tech), P_04 (ux, rare-skill seed STU_03/STU_12), P_05 (mgmt)",
+      "overload": "P_05 (final team STU_04/08/07/09) sprint hours 36 vs team capacity 26 -> U~1.385 > 1.2 trips the overload guard; P_01/P_04 stay <=1.0",
+      "c05_hero": "STU_08 declares technical 5/5 with no evidence -> contradicted -> 5x0.5 = 2.5 (Phase A only; ends in team P_05)"
     },
-    "confidence_tier_counts": {"verified": 3, "portfolio": 3, "self_report": 4, "contradicted": 2}
+    "confidence_tier_counts": {
+      "verified": 3,
+      "portfolio": 3,
+      "self_report": 4,
+      "contradicted": 2
+    }
   },
-
   "students": [
     {
-      "student_id": "STU_01", "name": "Aisha Rahman", "email": "aisha.r@aegis.test",
-      "capacity_hours": 10.0, "preferred_teammate_id": "STU_05", "preferred_role": "tech_lead",
-      "availability": ["mon_am", "wed_pm", "fri_am"], "preferred_projects": ["P_01", "P_05", "P_04"],
+      "student_id": "STU_01",
+      "name": "Aisha Rahman",
+      "email": "aisha.r@aegis.test",
+      "capacity_hours": 10.0,
+      "preferred_teammate_id": "STU_05",
+      "preferred_role": "tech_lead",
+      "availability": [
+        "mon_am",
+        "wed_pm",
+        "fri_am"
+      ],
+      "preferred_projects": [
+        "P_01",
+        "P_05",
+        "P_04"
+      ],
       "skills": [
-        {"discipline": "technical", "declared_level": 5, "confidence_basis": "verified", "lms_grade": 4.8, "survey_score": 4.7},
-        {"discipline": "management", "declared_level": 4, "confidence_basis": "verified", "lms_grade": 4.0, "survey_score": 3.9},
-        {"discipline": "ux", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.1},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0}
+        {
+          "discipline": "technical",
+          "declared_level": 5,
+          "confidence_basis": "verified",
+          "lms_grade": 4.8,
+          "survey_score": 4.7
+        },
+        {
+          "discipline": "management",
+          "declared_level": 4,
+          "confidence_basis": "verified",
+          "lms_grade": 4.0,
+          "survey_score": 3.9
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.1
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        }
       ]
     },
     {
-      "student_id": "STU_02", "name": "Bilal Khan", "email": "bilal.k@aegis.test",
-      "capacity_hours": 8.0, "preferred_teammate_id": null, "preferred_role": "doc_lead",
-      "availability": ["tue_pm", "thu_am", "fri_pm"], "preferred_projects": ["P_01", "P_02", "P_06"],
+      "student_id": "STU_02",
+      "name": "Bilal Khan",
+      "email": "bilal.k@aegis.test",
+      "capacity_hours": 8.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "doc_lead",
+      "availability": [
+        "tue_pm",
+        "thu_am",
+        "fri_pm"
+      ],
+      "preferred_projects": [
+        "P_01",
+        "P_05",
+        "P_06"
+      ],
       "skills": [
-        {"discipline": "communication", "declared_level": 5, "confidence_basis": "verified", "lms_grade": 4.6, "survey_score": 4.5},
-        {"discipline": "management", "declared_level": 4, "confidence_basis": "verified", "lms_grade": 3.8, "survey_score": 3.7},
-        {"discipline": "technical", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.0},
-        {"discipline": "ux", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.9}
+        {
+          "discipline": "communication",
+          "declared_level": 5,
+          "confidence_basis": "verified",
+          "lms_grade": 4.6,
+          "survey_score": 4.5
+        },
+        {
+          "discipline": "management",
+          "declared_level": 4,
+          "confidence_basis": "verified",
+          "lms_grade": 3.8,
+          "survey_score": 3.7
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.0
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.9
+        }
       ]
     },
     {
-      "student_id": "STU_03", "name": "Chen Wei", "email": "chen.w@aegis.test",
-      "capacity_hours": 9.0, "preferred_teammate_id": null, "preferred_role": "tech_lead",
-      "availability": ["mon_am", "wed_pm", "thu_pm"], "preferred_projects": ["P_04", "P_01", "P_07"],
+      "student_id": "STU_03",
+      "name": "Chen Wei",
+      "email": "chen.w@aegis.test",
+      "capacity_hours": 9.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "tech_lead",
+      "availability": [
+        "mon_am",
+        "wed_pm",
+        "thu_pm"
+      ],
+      "preferred_projects": [
+        "P_04",
+        "P_01",
+        "P_05"
+      ],
       "skills": [
-        {"discipline": "ux", "declared_level": 5, "confidence_basis": "portfolio", "portfolio_submitted": true, "survey_score": 4.6},
-        {"discipline": "technical", "declared_level": 4, "confidence_basis": "portfolio", "portfolio_submitted": true, "survey_score": 4.0},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.1},
-        {"discipline": "management", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.2}
+        {
+          "discipline": "ux",
+          "declared_level": 5,
+          "confidence_basis": "portfolio",
+          "portfolio_submitted": true,
+          "survey_score": 4.6
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 4,
+          "confidence_basis": "portfolio",
+          "portfolio_submitted": true,
+          "survey_score": 4.0
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.1
+        },
+        {
+          "discipline": "management",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.2
+        }
       ]
     },
     {
-      "student_id": "STU_04", "name": "Devi Menon", "email": "devi.m@aegis.test",
-      "capacity_hours": 7.0, "preferred_teammate_id": "STU_06", "preferred_role": "research_lead",
-      "availability": ["tue_am", "thu_am", "fri_am"], "preferred_projects": ["P_05", "P_06", "P_01"],
+      "student_id": "STU_04",
+      "name": "Devi Menon",
+      "email": "devi.m@aegis.test",
+      "capacity_hours": 7.0,
+      "preferred_teammate_id": "STU_06",
+      "preferred_role": "research_lead",
+      "availability": [
+        "tue_am",
+        "thu_am",
+        "fri_am"
+      ],
+      "preferred_projects": [
+        "P_05",
+        "P_06",
+        "P_01"
+      ],
       "skills": [
-        {"discipline": "management", "declared_level": 5, "confidence_basis": "portfolio", "portfolio_submitted": true, "survey_score": 4.5},
-        {"discipline": "communication", "declared_level": 4, "confidence_basis": "portfolio", "portfolio_submitted": true, "survey_score": 3.9},
-        {"discipline": "ux", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.8},
-        {"discipline": "technical", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.3}
+        {
+          "discipline": "management",
+          "declared_level": 5,
+          "confidence_basis": "portfolio",
+          "portfolio_submitted": true,
+          "survey_score": 4.5
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 4,
+          "confidence_basis": "portfolio",
+          "portfolio_submitted": true,
+          "survey_score": 3.9
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.8
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.3
+        }
       ]
     },
     {
-      "student_id": "STU_05", "name": "Eshan Perera", "email": "eshan.p@aegis.test",
-      "capacity_hours": 6.0, "preferred_teammate_id": "STU_01", "preferred_role": "qa_lead",
-      "availability": ["mon_am", "wed_pm"], "preferred_projects": ["P_01", "P_07", "P_02"],
+      "student_id": "STU_05",
+      "name": "Eshan Perera",
+      "email": "eshan.p@aegis.test",
+      "capacity_hours": 6.0,
+      "preferred_teammate_id": "STU_01",
+      "preferred_role": "qa_lead",
+      "availability": [
+        "mon_am",
+        "wed_pm"
+      ],
+      "preferred_projects": [
+        "P_01",
+        "P_05",
+        "P_07"
+      ],
       "skills": [
-        {"discipline": "technical", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0},
-        {"discipline": "ux", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.9},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.1},
-        {"discipline": "management", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.0}
+        {
+          "discipline": "technical",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.9
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.1
+        },
+        {
+          "discipline": "management",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.0
+        }
       ]
     },
     {
-      "student_id": "STU_06", "name": "Farah Idris", "email": "farah.i@aegis.test",
-      "capacity_hours": 8.0, "preferred_teammate_id": "STU_04", "preferred_role": "doc_lead",
-      "availability": ["tue_pm", "thu_am", "fri_pm"], "preferred_projects": ["P_06", "P_05", "P_01"],
+      "student_id": "STU_06",
+      "name": "Farah Idris",
+      "email": "farah.i@aegis.test",
+      "capacity_hours": 8.0,
+      "preferred_teammate_id": "STU_04",
+      "preferred_role": "doc_lead",
+      "availability": [
+        "tue_pm",
+        "thu_am",
+        "fri_pm"
+      ],
+      "preferred_projects": [
+        "P_04",
+        "P_05",
+        "P_06"
+      ],
       "skills": [
-        {"discipline": "communication", "declared_level": 4, "confidence_basis": "self_report", "survey_score": 3.8},
-        {"discipline": "ux", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0},
-        {"discipline": "management", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.9},
-        {"discipline": "technical", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.1}
+        {
+          "discipline": "communication",
+          "declared_level": 4,
+          "confidence_basis": "self_report",
+          "survey_score": 3.8
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        },
+        {
+          "discipline": "management",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.9
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.1
+        }
       ]
     },
     {
-      "student_id": "STU_07", "name": "Gita Nair", "email": "gita.n@aegis.test",
-      "capacity_hours": 6.0, "preferred_teammate_id": null, "preferred_role": "research_lead",
-      "availability": ["mon_pm", "wed_am"], "preferred_projects": ["P_01", "P_04", "P_05"],
+      "student_id": "STU_07",
+      "name": "Gita Nair",
+      "email": "gita.n@aegis.test",
+      "capacity_hours": 6.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "research_lead",
+      "availability": [
+        "mon_pm",
+        "wed_am"
+      ],
+      "preferred_projects": [
+        "P_01",
+        "P_05",
+        "P_04"
+      ],
       "skills": [
-        {"discipline": "management", "declared_level": 4, "confidence_basis": "self_report", "survey_score": 3.6},
-        {"discipline": "technical", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.8},
-        {"discipline": "ux", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.2}
+        {
+          "discipline": "management",
+          "declared_level": 4,
+          "confidence_basis": "self_report",
+          "survey_score": 3.6
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.8
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.2
+        }
       ]
     },
     {
-      "student_id": "STU_08", "name": "Haris Fernando", "email": "haris.f@aegis.test",
-      "capacity_hours": 8.0, "preferred_teammate_id": "STU_01", "preferred_role": "tech_lead",
-      "availability": ["mon_am", "wed_pm", "fri_am"], "preferred_projects": ["P_01", "P_05", "P_04"],
+      "student_id": "STU_08",
+      "name": "Haris Fernando",
+      "email": "haris.f@aegis.test",
+      "capacity_hours": 8.0,
+      "preferred_teammate_id": "STU_01",
+      "preferred_role": "tech_lead",
+      "availability": [
+        "mon_am",
+        "wed_pm",
+        "fri_am"
+      ],
+      "preferred_projects": [
+        "P_01",
+        "P_05",
+        "P_04"
+      ],
       "skills": [
-        {"discipline": "technical", "declared_level": 5, "confidence_basis": "contradicted", "survey_score": 4.9},
-        {"discipline": "management", "declared_level": 4, "confidence_basis": "contradicted", "survey_score": 3.8},
-        {"discipline": "ux", "declared_level": 4, "confidence_basis": "self_report", "survey_score": 3.5},
-        {"discipline": "communication", "declared_level": 4, "confidence_basis": "self_report", "survey_score": 3.6}
+        {
+          "discipline": "technical",
+          "declared_level": 5,
+          "confidence_basis": "contradicted",
+          "survey_score": 4.9
+        },
+        {
+          "discipline": "management",
+          "declared_level": 4,
+          "confidence_basis": "contradicted",
+          "survey_score": 3.8
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 4,
+          "confidence_basis": "self_report",
+          "survey_score": 3.5
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 4,
+          "confidence_basis": "self_report",
+          "survey_score": 3.6
+        }
       ]
     },
     {
-      "student_id": "STU_09", "name": "Iman Saleh", "email": "iman.s@aegis.test",
-      "capacity_hours": 5.0, "preferred_teammate_id": null, "preferred_role": "management",
-      "availability": ["tue_am", "thu_pm"], "preferred_projects": ["P_07", "P_02", "P_06"],
+      "student_id": "STU_09",
+      "name": "Iman Saleh",
+      "email": "iman.s@aegis.test",
+      "capacity_hours": 5.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "management",
+      "availability": [
+        "tue_am",
+        "thu_pm"
+      ],
+      "preferred_projects": [
+        "P_05",
+        "P_07",
+        "P_02"
+      ],
       "skills": [
-        {"discipline": "management", "declared_level": 5, "confidence_basis": "contradicted", "survey_score": 4.8},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.9},
-        {"discipline": "technical", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.0},
-        {"discipline": "ux", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.1}
+        {
+          "discipline": "management",
+          "declared_level": 5,
+          "confidence_basis": "contradicted",
+          "survey_score": 4.8
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.9
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.0
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.1
+        }
       ]
     },
     {
-      "student_id": "STU_10", "name": "Jaya Pillai", "email": "jaya.p@aegis.test",
-      "capacity_hours": 7.0, "preferred_teammate_id": null, "preferred_role": "qa_lead",
-      "availability": ["mon_pm", "wed_am", "fri_pm"], "preferred_projects": ["P_02", "P_07", "P_06"],
+      "student_id": "STU_10",
+      "name": "Jaya Pillai",
+      "email": "jaya.p@aegis.test",
+      "capacity_hours": 7.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "qa_lead",
+      "availability": [
+        "mon_pm",
+        "wed_am",
+        "fri_pm"
+      ],
+      "preferred_projects": [
+        "P_04",
+        "P_05",
+        "P_02"
+      ],
       "skills": [
-        {"discipline": "ux", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0},
-        {"discipline": "technical", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.9},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0},
-        {"discipline": "management", "declared_level": 2, "confidence_basis": "self_report", "survey_score": 2.2}
+        {
+          "discipline": "ux",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.9
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        },
+        {
+          "discipline": "management",
+          "declared_level": 2,
+          "confidence_basis": "self_report",
+          "survey_score": 2.2
+        }
       ]
     },
     {
-      "student_id": "STU_11", "name": "Kabir Anand", "email": "kabir.a@aegis.test",
-      "capacity_hours": 9.0, "preferred_teammate_id": null, "preferred_role": "tech_lead",
-      "availability": ["tue_pm", "thu_am", "fri_am"], "preferred_projects": ["P_07", "P_01", "P_02"],
+      "student_id": "STU_11",
+      "name": "Kabir Anand",
+      "email": "kabir.a@aegis.test",
+      "capacity_hours": 9.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "tech_lead",
+      "availability": [
+        "tue_pm",
+        "thu_am",
+        "fri_am"
+      ],
+      "preferred_projects": [
+        "P_05",
+        "P_01",
+        "P_07"
+      ],
       "skills": [
-        {"discipline": "technical", "declared_level": 4, "confidence_basis": "portfolio", "portfolio_submitted": true, "survey_score": 4.1},
-        {"discipline": "ux", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0},
-        {"discipline": "management", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.8},
-        {"discipline": "communication", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.1}
+        {
+          "discipline": "technical",
+          "declared_level": 4,
+          "confidence_basis": "portfolio",
+          "portfolio_submitted": true,
+          "survey_score": 4.1
+        },
+        {
+          "discipline": "ux",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        },
+        {
+          "discipline": "management",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.8
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.1
+        }
       ]
     },
     {
-      "student_id": "STU_12", "name": "Lena Costa", "email": "lena.c@aegis.test",
-      "capacity_hours": 8.0, "preferred_teammate_id": null, "preferred_role": "ux_lead",
-      "availability": ["mon_am", "wed_pm", "thu_pm"], "preferred_projects": ["P_04", "P_06", "P_05"],
+      "student_id": "STU_12",
+      "name": "Lena Costa",
+      "email": "lena.c@aegis.test",
+      "capacity_hours": 8.0,
+      "preferred_teammate_id": null,
+      "preferred_role": "ux_lead",
+      "availability": [
+        "mon_am",
+        "wed_pm",
+        "thu_pm"
+      ],
+      "preferred_projects": [
+        "P_04",
+        "P_05",
+        "P_06"
+      ],
       "skills": [
-        {"discipline": "ux", "declared_level": 4, "confidence_basis": "verified", "lms_grade": 4.0, "survey_score": 3.9},
-        {"discipline": "communication", "declared_level": 4, "confidence_basis": "verified", "lms_grade": 3.9, "survey_score": 3.8},
-        {"discipline": "technical", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 2.9},
-        {"discipline": "management", "declared_level": 3, "confidence_basis": "self_report", "survey_score": 3.0}
+        {
+          "discipline": "ux",
+          "declared_level": 4,
+          "confidence_basis": "verified",
+          "lms_grade": 4.0,
+          "survey_score": 3.9
+        },
+        {
+          "discipline": "communication",
+          "declared_level": 4,
+          "confidence_basis": "verified",
+          "lms_grade": 3.9,
+          "survey_score": 3.8
+        },
+        {
+          "discipline": "technical",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 2.9
+        },
+        {
+          "discipline": "management",
+          "declared_level": 3,
+          "confidence_basis": "self_report",
+          "survey_score": 3.0
+        }
       ]
     }
   ],
-
   "projects": [
     {
-      "project_id": "P_01", "title": "Campus Mental-Health Companion App", "capacity": 4,
-      "supervisor_id": "SUP_01", "total_hours": 200.0,
-      "required_skills": ["technical", "ux", "communication"],
-      "critical_skills": ["technical"], "meeting_slots": ["mon_am", "wed_pm"],
+      "project_id": "P_01",
+      "title": "Campus Mental-Health Companion App",
+      "capacity": 4,
+      "supervisor_id": "SUP_01",
+      "total_hours": 28.0,
+      "required_skills": [
+        "technical",
+        "ux",
+        "communication"
+      ],
+      "critical_skills": [
+        "technical"
+      ],
+      "meeting_slots": [
+        "mon_am",
+        "wed_pm"
+      ],
       "abstract": "A mobile wellbeing companion for university students that combines mood journaling, anonymous peer support rooms, and a triage chatbot that escalates high-risk conversations to campus counsellors. The app integrates with the student calendar to suggest breaks during heavy assessment periods and uses on-device sentiment analysis so that sensitive text never leaves the phone. The goal is to reduce the barrier to seeking help by making the first step private, fast, and non-judgemental."
     },
     {
-      "project_id": "P_02", "title": "Smart Campus Food-Waste Reduction Platform", "capacity": 5,
-      "supervisor_id": "SUP_02", "total_hours": 220.0,
-      "required_skills": ["technical", "ux"],
-      "critical_skills": ["technical"], "meeting_slots": ["tue_pm", "thu_am"],
+      "project_id": "P_02",
+      "title": "Smart Campus Food-Waste Reduction Platform",
+      "capacity": 5,
+      "supervisor_id": "SUP_02",
+      "total_hours": 28.0,
+      "required_skills": [
+        "technical",
+        "ux"
+      ],
+      "critical_skills": [
+        "technical"
+      ],
+      "meeting_slots": [
+        "tue_pm",
+        "thu_am"
+      ],
       "abstract": "A platform that tackles food waste in campus canteens using computer vision to measure plate waste at the tray-return station and machine learning to forecast daily demand so kitchens cook closer to what is actually eaten. Surplus meals are matched in real time to a student marketplace where discounted portions can be claimed before closing. Dashboards give catering managers waste analytics by dish, day, and hall, turning guesswork into measurable reduction targets."
     },
     {
-      "project_id": "P_03", "title": "AI Canteen Surplus and Plate-Waste Analytics", "capacity": 4,
-      "supervisor_id": "SUP_03", "total_hours": 210.0,
-      "required_skills": ["technical", "ux"],
-      "critical_skills": ["technical"], "meeting_slots": ["tue_pm", "thu_am"],
+      "project_id": "P_03",
+      "title": "AI Canteen Surplus and Plate-Waste Analytics",
+      "capacity": 4,
+      "supervisor_id": "SUP_03",
+      "total_hours": 28.0,
+      "required_skills": [
+        "technical",
+        "ux"
+      ],
+      "critical_skills": [
+        "technical"
+      ],
+      "meeting_slots": [
+        "tue_pm",
+        "thu_am"
+      ],
       "abstract": "A platform that reduces food waste in campus canteens using computer vision to measure plate waste at the tray-return station and machine learning to forecast daily demand so kitchens cook closer to what is actually eaten. Surplus meals are matched in real time to a student marketplace where discounted portions can be claimed before closing. Dashboards give catering managers waste analytics by dish, day, and hall, turning guesswork into measurable reduction targets for each canteen."
     },
     {
-      "project_id": "P_04", "title": "Accessible Museum AR Tour Designer", "capacity": 4,
-      "supervisor_id": "SUP_04", "total_hours": 200.0,
-      "required_skills": ["ux", "technical", "communication"],
-      "critical_skills": ["ux"], "meeting_slots": ["mon_am", "thu_pm"],
+      "project_id": "P_04",
+      "title": "Accessible Museum AR Tour Designer",
+      "capacity": 4,
+      "supervisor_id": "SUP_04",
+      "total_hours": 30.0,
+      "required_skills": [
+        "ux",
+        "technical",
+        "communication"
+      ],
+      "critical_skills": [
+        "ux"
+      ],
+      "meeting_slots": [
+        "mon_am",
+        "thu_pm"
+      ],
       "abstract": "An augmented-reality authoring tool that lets museum curators build self-guided tours which adapt to each visitor's accessibility needs, offering audio description for low-vision guests, sign-language avatars for deaf visitors, and simplified-language tracks for neurodivergent audiences. The emphasis is on inclusive interaction design so that a single exhibit can be experienced many ways without curators needing to code. Strong user-experience research drives every layout and navigation decision."
     },
     {
-      "project_id": "P_05", "title": "Peer-to-Peer Skill Exchange Network", "capacity": 5,
-      "supervisor_id": "SUP_05", "total_hours": 215.0,
-      "required_skills": ["technical", "management", "communication"],
-      "critical_skills": ["management"], "meeting_slots": ["mon_am", "fri_am"],
+      "project_id": "P_05",
+      "title": "Peer-to-Peer Skill Exchange Network",
+      "capacity": 4,
+      "supervisor_id": "SUP_05",
+      "total_hours": 36.0,
+      "required_skills": [
+        "technical",
+        "management",
+        "communication"
+      ],
+      "critical_skills": [
+        "management"
+      ],
+      "meeting_slots": [
+        "mon_am",
+        "fri_am"
+      ],
       "abstract": "A marketplace where students trade skills rather than money: a coder tutors a designer in algorithms while the designer builds their portfolio site in return. The platform handles scheduling, reputation, and a fair-exchange ledger that keeps trades balanced over time. The hard problem is operations and trust management at scale, making project management and clear communication the load-bearing disciplines for the team that builds it."
     },
     {
-      "project_id": "P_06", "title": "Community Disaster-Response Coordination Hub", "capacity": 5,
-      "supervisor_id": "SUP_06", "total_hours": 230.0,
-      "required_skills": ["management", "communication", "technical"],
-      "critical_skills": ["communication"], "meeting_slots": ["tue_am", "fri_pm"],
+      "project_id": "P_06",
+      "title": "Community Disaster-Response Coordination Hub",
+      "capacity": 5,
+      "supervisor_id": "SUP_06",
+      "total_hours": 28.0,
+      "required_skills": [
+        "management",
+        "communication",
+        "technical"
+      ],
+      "critical_skills": [
+        "communication"
+      ],
+      "meeting_slots": [
+        "tue_am",
+        "fri_pm"
+      ],
       "abstract": "A coordination hub for neighbourhood disaster response that maps volunteers, supplies, and shelter capacity during floods and storms, then routes requests to the nearest able responder. It works offline-first over intermittent connectivity and falls back to SMS when data networks fail. Because lives depend on clear instructions under stress, the project leans heavily on communication design and operational management rather than raw engineering novelty."
     },
     {
-      "project_id": "P_07", "title": "Open-Source Research Reproducibility Tracker", "capacity": 4,
-      "supervisor_id": "SUP_07", "total_hours": 205.0,
-      "required_skills": ["technical", "management", "communication"],
-      "critical_skills": ["technical"], "meeting_slots": ["tue_pm", "thu_pm"],
+      "project_id": "P_07",
+      "title": "Open-Source Research Reproducibility Tracker",
+      "capacity": 4,
+      "supervisor_id": "SUP_07",
+      "total_hours": 28.0,
+      "required_skills": [
+        "technical",
+        "management",
+        "communication"
+      ],
+      "critical_skills": [
+        "technical"
+      ],
+      "meeting_slots": [
+        "tue_pm",
+        "thu_pm"
+      ],
       "abstract": "A tool that helps research labs prove their published results can be reproduced by capturing the exact code, data snapshot, and environment behind every figure in a paper and re-running the pipeline on demand. It flags when a dependency drifts or a dataset changes so that silent reproducibility rot is caught early. The target users are academic groups who want a verifiable audit trail from raw data to final chart."
     },
     {
-      "project_id": "P_08", "title": "Urban Cycling Safety Heatmap", "capacity": 4,
-      "supervisor_id": "SUP_08", "total_hours": 195.0,
-      "required_skills": ["technical", "ux"],
-      "critical_skills": ["technical"], "meeting_slots": ["wed_am", "fri_pm"],
+      "project_id": "P_08",
+      "title": "Urban Cycling Safety Heatmap",
+      "capacity": 4,
+      "supervisor_id": "SUP_08",
+      "total_hours": 28.0,
+      "required_skills": [
+        "technical",
+        "ux"
+      ],
+      "critical_skills": [
+        "technical"
+      ],
+      "meeting_slots": [
+        "wed_am",
+        "fri_pm"
+      ],
       "abstract": "A city cycling-safety map that fuses crowdsourced near-miss reports, open accident records, and road-gradient data to highlight dangerous junctions and suggest safer routes for commuters. Riders log incidents with one tap, and councils get an evidence base for where to invest in protected lanes. The design challenge is turning noisy, sparse citizen data into a trustworthy signal that holds up to public scrutiny."
     }
   ],
-
   "activity_log": [
-    {"author_id": "STU_01", "sim_day": 1, "event_type": "commit", "assigned_to": "STU_01", "task_id": "T_01a"},
-    {"author_id": "STU_01", "sim_day": 2, "event_type": "commit", "assigned_to": "STU_01", "task_id": "T_01a"},
-    {"author_id": "STU_01", "sim_day": 3, "event_type": "commit", "assigned_to": "STU_08", "task_id": "T_08a"},
-    {"author_id": "STU_01", "sim_day": 4, "event_type": "commit", "assigned_to": "STU_01", "task_id": "T_01b"},
-    {"author_id": "STU_01", "sim_day": 5, "event_type": "commit", "assigned_to": "STU_08", "task_id": "T_08a"},
-    {"author_id": "STU_01", "sim_day": 6, "event_type": "edit", "assigned_to": "STU_01", "task_id": "T_01b"},
-    {"author_id": "STU_01", "sim_day": 7, "event_type": "commit", "assigned_to": "STU_08", "task_id": "T_08b"},
-    {"author_id": "STU_01", "sim_day": 9, "event_type": "commit", "assigned_to": "STU_08", "task_id": "T_08b"},
-    {"author_id": "STU_01", "sim_day": 11, "event_type": "commit", "assigned_to": "STU_08", "task_id": "T_08c"},
-    {"author_id": "STU_01", "sim_day": 12, "event_type": "commit", "assigned_to": "STU_01", "task_id": "T_01c"},
-    {"author_id": "STU_01", "sim_day": 14, "event_type": "commit", "assigned_to": "STU_01", "task_id": "T_01c"},
-
-    {"author_id": "STU_08", "sim_day": 1, "event_type": "ping"},
-    {"author_id": "STU_08", "sim_day": 6, "event_type": "edit"},
-    {"author_id": "STU_08", "sim_day": 10, "event_type": "ping"},
-
-    {"author_id": "STU_02", "sim_day": 1, "event_type": "commit", "assigned_to": "STU_02", "task_id": "T_02a"},
-    {"author_id": "STU_02", "sim_day": 4, "event_type": "edit", "assigned_to": "STU_02", "task_id": "T_02a"},
-    {"author_id": "STU_02", "sim_day": 6, "event_type": "commit", "assigned_to": "STU_02", "task_id": "T_02b"},
-    {"author_id": "STU_02", "sim_day": 8, "event_type": "edit", "assigned_to": "STU_02", "task_id": "T_02b"},
-    {"author_id": "STU_02", "sim_day": 10, "event_type": "commit", "assigned_to": "STU_02", "task_id": "T_02c"},
-    {"author_id": "STU_02", "sim_day": 12, "event_type": "edit", "assigned_to": "STU_02", "task_id": "T_02c"},
-    {"author_id": "STU_02", "sim_day": 14, "event_type": "commit", "assigned_to": "STU_02", "task_id": "T_02d"},
-
-    {"author_id": "STU_03", "sim_day": 1, "event_type": "edit", "assigned_to": "STU_03", "task_id": "T_03a"},
-    {"author_id": "STU_03", "sim_day": 3, "event_type": "commit", "assigned_to": "STU_03", "task_id": "T_03a"},
-    {"author_id": "STU_03", "sim_day": 6, "event_type": "edit", "assigned_to": "STU_03", "task_id": "T_03b"},
-    {"author_id": "STU_03", "sim_day": 9, "event_type": "commit", "assigned_to": "STU_03", "task_id": "T_03b"},
-    {"author_id": "STU_03", "sim_day": 12, "event_type": "edit", "assigned_to": "STU_03", "task_id": "T_03c"},
-
-    {"author_id": "STU_05", "sim_day": 2, "event_type": "edit", "assigned_to": "STU_05", "task_id": "T_05a"},
-    {"author_id": "STU_05", "sim_day": 5, "event_type": "commit", "assigned_to": "STU_05", "task_id": "T_05a"},
-    {"author_id": "STU_05", "sim_day": 8, "event_type": "edit", "assigned_to": "STU_05", "task_id": "T_05b"},
-    {"author_id": "STU_05", "sim_day": 11, "event_type": "commit", "assigned_to": "STU_05", "task_id": "T_05b"},
-    {"author_id": "STU_05", "sim_day": 13, "event_type": "ping", "assigned_to": "STU_05", "task_id": "T_05c"},
-
-    {"author_id": "STU_06", "sim_day": 2, "event_type": "edit", "assigned_to": "STU_06", "task_id": "T_06a"},
-    {"author_id": "STU_06", "sim_day": 4, "event_type": "commit", "assigned_to": "STU_06", "task_id": "T_06a"},
-    {"author_id": "STU_06", "sim_day": 7, "event_type": "edit", "assigned_to": "STU_06", "task_id": "T_06b"},
-    {"author_id": "STU_06", "sim_day": 11, "event_type": "commit", "assigned_to": "STU_06", "task_id": "T_06b"},
-
-    {"author_id": "STU_04", "sim_day": 1, "event_type": "commit", "assigned_to": "STU_04", "task_id": "T_04a"},
-    {"author_id": "STU_04", "sim_day": 5, "event_type": "edit", "assigned_to": "STU_04", "task_id": "T_04a"},
-    {"author_id": "STU_04", "sim_day": 10, "event_type": "commit", "assigned_to": "STU_04", "task_id": "T_04b"},
-
-    {"author_id": "STU_09", "sim_day": 2, "event_type": "edit", "assigned_to": "STU_09", "task_id": "T_09a"},
-    {"author_id": "STU_09", "sim_day": 8, "event_type": "commit", "assigned_to": "STU_09", "task_id": "T_09a"},
-    {"author_id": "STU_09", "sim_day": 12, "event_type": "edit", "assigned_to": "STU_09", "task_id": "T_09b"},
-
-    {"author_id": "STU_10", "sim_day": 3, "event_type": "edit", "assigned_to": "STU_10", "task_id": "T_10a"},
-    {"author_id": "STU_10", "sim_day": 7, "event_type": "commit", "assigned_to": "STU_10", "task_id": "T_10a"},
-    {"author_id": "STU_10", "sim_day": 11, "event_type": "edit", "assigned_to": "STU_10", "task_id": "T_10b"},
-
-    {"author_id": "STU_11", "sim_day": 1, "event_type": "commit", "assigned_to": "STU_11", "task_id": "T_11a"},
-    {"author_id": "STU_11", "sim_day": 4, "event_type": "edit", "assigned_to": "STU_11", "task_id": "T_11a"},
-    {"author_id": "STU_11", "sim_day": 9, "event_type": "commit", "assigned_to": "STU_11", "task_id": "T_11b"},
-    {"author_id": "STU_11", "sim_day": 13, "event_type": "edit", "assigned_to": "STU_11", "task_id": "T_11b"},
-
-    {"author_id": "STU_12", "sim_day": 2, "event_type": "edit", "assigned_to": "STU_12", "task_id": "T_12a"},
-    {"author_id": "STU_12", "sim_day": 5, "event_type": "commit", "assigned_to": "STU_12", "task_id": "T_12a"},
-    {"author_id": "STU_12", "sim_day": 8, "event_type": "edit", "assigned_to": "STU_12", "task_id": "T_12b"},
-    {"author_id": "STU_12", "sim_day": 11, "event_type": "commit", "assigned_to": "STU_12", "task_id": "T_12b"},
-    {"author_id": "STU_12", "sim_day": 14, "event_type": "edit", "assigned_to": "STU_12", "task_id": "T_12c"}
+    {
+      "author_id": "STU_01",
+      "sim_day": 1,
+      "event_type": "commit",
+      "assigned_to": "STU_01",
+      "task_id": "T_01a"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 2,
+      "event_type": "commit",
+      "assigned_to": "STU_01",
+      "task_id": "T_01a"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 3,
+      "event_type": "commit",
+      "assigned_to": "STU_05",
+      "task_id": "T_05a"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 4,
+      "event_type": "commit",
+      "assigned_to": "STU_01",
+      "task_id": "T_01b"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 5,
+      "event_type": "commit",
+      "assigned_to": "STU_05",
+      "task_id": "T_05a"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 7,
+      "event_type": "commit",
+      "assigned_to": "STU_05",
+      "task_id": "T_05b"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 9,
+      "event_type": "commit",
+      "assigned_to": "STU_05",
+      "task_id": "T_05b"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 11,
+      "event_type": "commit",
+      "assigned_to": "STU_05",
+      "task_id": "T_05c"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 12,
+      "event_type": "commit",
+      "assigned_to": "STU_01",
+      "task_id": "T_01c"
+    },
+    {
+      "author_id": "STU_01",
+      "sim_day": 14,
+      "event_type": "commit",
+      "assigned_to": "STU_01",
+      "task_id": "T_01c"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 1,
+      "event_type": "commit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02a"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 4,
+      "event_type": "edit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02a"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 6,
+      "event_type": "commit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02b"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 8,
+      "event_type": "edit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02b"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 10,
+      "event_type": "commit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02c"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 12,
+      "event_type": "edit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02c"
+    },
+    {
+      "author_id": "STU_02",
+      "sim_day": 14,
+      "event_type": "commit",
+      "assigned_to": "STU_02",
+      "task_id": "T_02d"
+    },
+    {
+      "author_id": "STU_03",
+      "sim_day": 1,
+      "event_type": "commit",
+      "assigned_to": "STU_03",
+      "task_id": "T_03a"
+    },
+    {
+      "author_id": "STU_03",
+      "sim_day": 3,
+      "event_type": "edit",
+      "assigned_to": "STU_03",
+      "task_id": "T_03a"
+    },
+    {
+      "author_id": "STU_03",
+      "sim_day": 6,
+      "event_type": "commit",
+      "assigned_to": "STU_03",
+      "task_id": "T_03b"
+    },
+    {
+      "author_id": "STU_03",
+      "sim_day": 9,
+      "event_type": "edit",
+      "assigned_to": "STU_03",
+      "task_id": "T_03b"
+    },
+    {
+      "author_id": "STU_03",
+      "sim_day": 12,
+      "event_type": "commit",
+      "assigned_to": "STU_03",
+      "task_id": "T_03c"
+    },
+    {
+      "author_id": "STU_04",
+      "sim_day": 1,
+      "event_type": "commit",
+      "assigned_to": "STU_04",
+      "task_id": "T_04a"
+    },
+    {
+      "author_id": "STU_04",
+      "sim_day": 5,
+      "event_type": "edit",
+      "assigned_to": "STU_04",
+      "task_id": "T_04a"
+    },
+    {
+      "author_id": "STU_04",
+      "sim_day": 10,
+      "event_type": "commit",
+      "assigned_to": "STU_04",
+      "task_id": "T_04b"
+    },
+    {
+      "author_id": "STU_05",
+      "sim_day": 1,
+      "event_type": "ping"
+    },
+    {
+      "author_id": "STU_05",
+      "sim_day": 6,
+      "event_type": "edit"
+    },
+    {
+      "author_id": "STU_05",
+      "sim_day": 10,
+      "event_type": "ping"
+    },
+    {
+      "author_id": "STU_06",
+      "sim_day": 2,
+      "event_type": "commit",
+      "assigned_to": "STU_06",
+      "task_id": "T_06a"
+    },
+    {
+      "author_id": "STU_06",
+      "sim_day": 4,
+      "event_type": "edit",
+      "assigned_to": "STU_06",
+      "task_id": "T_06a"
+    },
+    {
+      "author_id": "STU_06",
+      "sim_day": 7,
+      "event_type": "commit",
+      "assigned_to": "STU_06",
+      "task_id": "T_06b"
+    },
+    {
+      "author_id": "STU_06",
+      "sim_day": 11,
+      "event_type": "edit",
+      "assigned_to": "STU_06",
+      "task_id": "T_06b"
+    },
+    {
+      "author_id": "STU_08",
+      "sim_day": 2,
+      "event_type": "commit",
+      "assigned_to": "STU_08",
+      "task_id": "T_08a"
+    },
+    {
+      "author_id": "STU_08",
+      "sim_day": 6,
+      "event_type": "edit",
+      "assigned_to": "STU_08",
+      "task_id": "T_08a"
+    },
+    {
+      "author_id": "STU_08",
+      "sim_day": 10,
+      "event_type": "commit",
+      "assigned_to": "STU_08",
+      "task_id": "T_08b"
+    },
+    {
+      "author_id": "STU_08",
+      "sim_day": 13,
+      "event_type": "edit",
+      "assigned_to": "STU_08",
+      "task_id": "T_08b"
+    },
+    {
+      "author_id": "STU_09",
+      "sim_day": 2,
+      "event_type": "commit",
+      "assigned_to": "STU_09",
+      "task_id": "T_09a"
+    },
+    {
+      "author_id": "STU_09",
+      "sim_day": 8,
+      "event_type": "edit",
+      "assigned_to": "STU_09",
+      "task_id": "T_09a"
+    },
+    {
+      "author_id": "STU_09",
+      "sim_day": 12,
+      "event_type": "commit",
+      "assigned_to": "STU_09",
+      "task_id": "T_09b"
+    },
+    {
+      "author_id": "STU_10",
+      "sim_day": 3,
+      "event_type": "commit",
+      "assigned_to": "STU_10",
+      "task_id": "T_10a"
+    },
+    {
+      "author_id": "STU_10",
+      "sim_day": 7,
+      "event_type": "edit",
+      "assigned_to": "STU_10",
+      "task_id": "T_10a"
+    },
+    {
+      "author_id": "STU_10",
+      "sim_day": 11,
+      "event_type": "commit",
+      "assigned_to": "STU_10",
+      "task_id": "T_10b"
+    },
+    {
+      "author_id": "STU_11",
+      "sim_day": 1,
+      "event_type": "commit",
+      "assigned_to": "STU_11",
+      "task_id": "T_11a"
+    },
+    {
+      "author_id": "STU_11",
+      "sim_day": 4,
+      "event_type": "edit",
+      "assigned_to": "STU_11",
+      "task_id": "T_11a"
+    },
+    {
+      "author_id": "STU_11",
+      "sim_day": 9,
+      "event_type": "commit",
+      "assigned_to": "STU_11",
+      "task_id": "T_11b"
+    },
+    {
+      "author_id": "STU_11",
+      "sim_day": 13,
+      "event_type": "edit",
+      "assigned_to": "STU_11",
+      "task_id": "T_11b"
+    },
+    {
+      "author_id": "STU_12",
+      "sim_day": 2,
+      "event_type": "commit",
+      "assigned_to": "STU_12",
+      "task_id": "T_12a"
+    },
+    {
+      "author_id": "STU_12",
+      "sim_day": 5,
+      "event_type": "edit",
+      "assigned_to": "STU_12",
+      "task_id": "T_12a"
+    },
+    {
+      "author_id": "STU_12",
+      "sim_day": 8,
+      "event_type": "commit",
+      "assigned_to": "STU_12",
+      "task_id": "T_12b"
+    },
+    {
+      "author_id": "STU_12",
+      "sim_day": 11,
+      "event_type": "edit",
+      "assigned_to": "STU_12",
+      "task_id": "T_12b"
+    },
+    {
+      "author_id": "STU_12",
+      "sim_day": 14,
+      "event_type": "commit",
+      "assigned_to": "STU_12",
+      "task_id": "T_12c"
+    }
   ]
 }

@@ -104,19 +104,20 @@ def test_ghosting_case_present(cohort: Cohort) -> None:
 
 
 def test_sympathy_carry_case_present(cohort: Cohort) -> None:
-    """Of all work on STU_08's tasks, >=95% is authored by someone else (STU_01).
+    """Of all work on STU_05's tasks, >=95% is authored by someone else (STU_01).
 
-    Keyed on task ownership (assigned_to == owner), so if STU_08 genuinely did
+    Keyed on task ownership (assigned_to == owner), so if STU_05 genuinely did
     his own work it would appear in the denominator and drop the ratio below the
-    threshold — this assertion can actually fail, it is not a tautology.
+    threshold — this assertion can actually fail, it is not a tautology. STU_05
+    and his carrier STU_01 share team P_01 in the final allocation.
     """
-    on_08 = [e for e in cohort.activity_log if e.assigned_to == "STU_08"]
-    assert on_08, "expected events on STU_08's tasks"
-    by_others = [e for e in on_08 if e.author_id != "STU_08"]
-    ratio = len(by_others) / len(on_08)
+    on_05 = [e for e in cohort.activity_log if e.assigned_to == "STU_05"]
+    assert on_05, "expected events on STU_05's tasks"
+    by_others = [e for e in on_05 if e.author_id != "STU_05"]
+    ratio = len(by_others) / len(on_05)
     assert ratio >= config.SYMPATHY_RATIO
     # the carried student is still present via general activity -> not a ghost
-    assert "STU_08" in {e.author_id for e in cohort.activity_log}
+    assert "STU_05" in {e.author_id for e in cohort.activity_log}
 
 
 def test_duplicate_pair_distinct_projects(cohort: Cohort) -> None:
