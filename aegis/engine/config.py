@@ -20,9 +20,22 @@ CONFIDENCE: Final[dict[str, float]] = {
 
 # ── Phase A — Student-Project Fit(i,p) ──────────────────────────────────────
 FIT_WEIGHTS: Final[dict[str, float]] = {"skill": 0.50, "avail": 0.30, "role": 0.20}
+SKILL_TARGET: Final[float] = 3.0  # adjusted Â at/above which a skill requirement is "met"
+CRITICAL_SKILL_MULT: Final[float] = 2.0  # critical skills weighted x2 in SkillMatch
+ROLE_MATCH: Final[dict[str, float]] = {"primary": 1.0, "secondary": 0.6, "none": 0.3}
+# Maps a student's preferred role to the discipline it leans on (for RoleMatch).
+ROLE_DISCIPLINE: Final[dict[str, str]] = {
+    "tech_lead": "technical",
+    "qa_lead": "technical",
+    "ux_lead": "ux",
+    "research_lead": "management",
+    "doc_lead": "communication",
+    "management": "management",
+}
 
 # ── Phase B — dedupe + match ────────────────────────────────────────────────
 DEDUPE_THRESHOLD: Final[float] = 0.75  # cosine similarity -> flag for review
+SIMILARITY_PRECISION: Final[int] = 4  # decimal places reported for cosine similarity
 RARE_SKILL_BONUS: Final[int] = 15  # Priority bump when filling a scarce critical skill
 
 # ── Phase B — team formation ────────────────────────────────────────────────

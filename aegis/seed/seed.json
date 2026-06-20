@@ -169,7 +169,7 @@
       "supervisor_id": "SUP_03", "total_hours": 210.0,
       "required_skills": ["technical", "ux"],
       "critical_skills": ["technical"], "meeting_slots": ["tue_pm", "thu_am"],
-      "abstract": "A system to reduce canteen food waste on campus by applying computer vision at the tray-return point to quantify plate waste and using machine learning to predict daily meal demand so kitchens prepare closer to real consumption. Leftover surplus is offered through a real-time student marketplace where remaining portions are claimed at a discount before service ends. Catering staff get analytics dashboards breaking waste down by dish, day, and dining hall to set and track measurable reduction goals."
+      "abstract": "A platform that reduces food waste in campus canteens using computer vision to measure plate waste at the tray-return station and machine learning to forecast daily demand so kitchens cook closer to what is actually eaten. Surplus meals are matched in real time to a student marketplace where discounted portions can be claimed before closing. Dashboards give catering managers waste analytics by dish, day, and hall, turning guesswork into measurable reduction targets for each canteen."
     },
     {
       "project_id": "P_04", "title": "Accessible Museum AR Tour Designer", "capacity": 4,

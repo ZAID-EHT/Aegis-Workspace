@@ -6,8 +6,13 @@ the seed parses into domain objects and contains the demo cases the later phases
 
 from __future__ import annotations
 
+import json
 from collections import Counter
+from pathlib import Path
 
+import pytest
+
+from aegis.adapters.repo_seed import load_cohort
 from aegis.domain.models import CONFIDENCE_BASES, DISCIPLINES, Cohort
 from aegis.engine import config
 
@@ -67,6 +72,29 @@ def test_confidence_vocab_in_sync() -> None:
     config). Drift between them silently breaks Phase A scoring.
     """
     assert set(CONFIDENCE_BASES) == set(config.CONFIDENCE)
+
+
+def test_loader_rejects_unknown_vocab(tmp_path: Path) -> None:
+    """A typo'd discipline/basis must fail loudly at load, not silently score 0."""
+    bad = {
+        "students": [
+            {
+                "student_id": "STU_X",
+                "name": "Typo",
+                "email": "x@aegis.test",
+                "capacity_hours": 8.0,
+                "skills": [
+                    {"discipline": "techncial", "declared_level": 4, "confidence_basis": "verified"}
+                ],
+            }
+        ],
+        "projects": [],
+        "activity_log": [],
+    }
+    path = tmp_path / "bad_seed.json"
+    path.write_text(json.dumps(bad), encoding="utf-8")
+    with pytest.raises(ValueError, match="unknown discipline 'techncial'"):
+        load_cohort(path)
 
 
 def test_ghosting_case_present(cohort: Cohort) -> None:
