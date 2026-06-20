@@ -19,6 +19,7 @@ from aegis.domain.models import (
     Project,
     SkillDeclaration,
     Student,
+    TeamMonitoring,
 )
 
 DEFAULT_SEED: Path = Path(__file__).resolve().parents[1] / "seed" / "seed.json"
@@ -100,6 +101,18 @@ def _event(raw: dict[str, Any]) -> ActivityEvent:
     )
 
 
+def _monitoring(raw: dict[str, Any]) -> dict[str, TeamMonitoring]:
+    return {
+        str(pid): TeamMonitoring(
+            tasks_assigned=int(m["tasks_assigned"]),
+            tasks_done=int(m["tasks_done"]),
+            milestones_due=int(m["milestones_due"]),
+            milestones_done=int(m["milestones_done"]),
+        )
+        for pid, m in raw.items()
+    }
+
+
 def load_cohort(path: str | Path = DEFAULT_SEED) -> Cohort:
     """Load and validate the seed file into an immutable :class:`Cohort`."""
     data: Any = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -107,4 +120,5 @@ def load_cohort(path: str | Path = DEFAULT_SEED) -> Cohort:
         students=tuple(_student(s) for s in data["students"]),
         projects=tuple(_project(p) for p in data["projects"]),
         activity_log=tuple(_event(e) for e in data.get("activity_log", [])),
+        monitoring=_monitoring(data.get("monitoring", {})),
     )

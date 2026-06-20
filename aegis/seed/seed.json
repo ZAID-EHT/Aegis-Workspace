@@ -14,7 +14,8 @@
       "p08_filler": "P_08 has no applicants by design - extra abstract so TF-IDF dedupe runs on >8 submissions; it simply forms no team",
       "target_teams": "SPA funnels into 3 full teams of 4: P_01 (tech), P_04 (ux, rare-skill seed STU_03/STU_12), P_05 (mgmt)",
       "overload": "P_05 (final team STU_04/08/07/09) sprint hours 36 vs team capacity 26 -> U~1.385 > 1.2 trips the overload guard; P_01/P_04 stay <=1.0",
-      "c05_hero": "STU_08 declares technical 5/5 with no evidence -> contradicted -> 5x0.5 = 2.5 (Phase A only; ends in team P_05)"
+      "c05_hero": "STU_08 declares technical 5/5 with no evidence -> contradicted -> 5x0.5 = 2.5 (Phase A only; ends in team P_05)",
+      "health_bands": "Engineered spread: P_04 Healthy, P_01 At-Risk (carry imbalance + burnout), P_05 Critical (ghost + overload + low completion)"
     },
     "confidence_tier_counts": {
       "verified": 3,
@@ -793,52 +794,24 @@
     },
     {
       "author_id": "STU_02",
-      "sim_day": 1,
+      "sim_day": 2,
       "event_type": "commit",
       "assigned_to": "STU_02",
       "task_id": "T_02a"
     },
     {
       "author_id": "STU_02",
-      "sim_day": 4,
+      "sim_day": 7,
       "event_type": "edit",
       "assigned_to": "STU_02",
       "task_id": "T_02a"
     },
     {
       "author_id": "STU_02",
-      "sim_day": 6,
+      "sim_day": 11,
       "event_type": "commit",
       "assigned_to": "STU_02",
       "task_id": "T_02b"
-    },
-    {
-      "author_id": "STU_02",
-      "sim_day": 8,
-      "event_type": "edit",
-      "assigned_to": "STU_02",
-      "task_id": "T_02b"
-    },
-    {
-      "author_id": "STU_02",
-      "sim_day": 10,
-      "event_type": "commit",
-      "assigned_to": "STU_02",
-      "task_id": "T_02c"
-    },
-    {
-      "author_id": "STU_02",
-      "sim_day": 12,
-      "event_type": "edit",
-      "assigned_to": "STU_02",
-      "task_id": "T_02c"
-    },
-    {
-      "author_id": "STU_02",
-      "sim_day": 14,
-      "event_type": "commit",
-      "assigned_to": "STU_02",
-      "task_id": "T_02d"
     },
     {
       "author_id": "STU_03",
@@ -1031,13 +1004,6 @@
       "task_id": "T_11b"
     },
     {
-      "author_id": "STU_11",
-      "sim_day": 13,
-      "event_type": "edit",
-      "assigned_to": "STU_11",
-      "task_id": "T_11b"
-    },
-    {
       "author_id": "STU_12",
       "sim_day": 2,
       "event_type": "commit",
@@ -1072,5 +1038,25 @@
       "assigned_to": "STU_12",
       "task_id": "T_12c"
     }
-  ]
+  ],
+  "monitoring": {
+    "P_01": {
+      "tasks_assigned": 12,
+      "tasks_done": 10,
+      "milestones_due": 4,
+      "milestones_done": 3
+    },
+    "P_04": {
+      "tasks_assigned": 12,
+      "tasks_done": 11,
+      "milestones_due": 4,
+      "milestones_done": 4
+    },
+    "P_05": {
+      "tasks_assigned": 12,
+      "tasks_done": 6,
+      "milestones_due": 4,
+      "milestones_done": 1
+    }
+  }
 }

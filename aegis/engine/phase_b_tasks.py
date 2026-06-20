@@ -12,21 +12,8 @@ Pure: depends on domain + config only.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-
-from aegis.domain.models import Cohort, Project, Student, Team
+from aegis.domain.models import Cohort, Project, Student, TaskAllocation, Team
 from aegis.engine import config
-
-
-@dataclass(frozen=True)
-class TaskAllocation:
-    team_id: str
-    project_id: str
-    hours: dict[str, float]  # student_id -> assigned hours (after the guard)
-    utilisation: dict[str, float]  # student_id -> U(i) = assigned / capacity
-    overloaded: list[str] = field(default_factory=list)
-    unallocated_hours: float = 0.0  # hours shed by the overload guard
-    zero_capacity: list[str] = field(default_factory=list)  # members with no capacity (data error)
 
 
 def allocate_tasks(team: Team, cohort: Cohort) -> TaskAllocation:

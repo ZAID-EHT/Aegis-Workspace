@@ -71,6 +71,13 @@ HEALTH_WEIGHTS: Final[dict[str, float]] = {
     "milestone": 0.15,
 }
 HEALTH_BANDS: Final[dict[str, int]] = {"healthy": 75, "at_risk": 50}  # >=75 / 50-74 / <50
+EXPECTED_EVENTS_PER_STUDENT: Final[int] = 6  # baseline activity over the window for engagement
+MONITORING_WINDOW_DAYS: Final[int] = 14  # sprint length; anchors ghosting so trailing
+# silence is counted regardless of when other students last acted.
+# NOTE (deviation): README defines workload_balance as 1 - StdDev(utilisation). With
+# capacity-proportional task allocation, utilisation is uniform by construction (variance
+# ~0), so we measure balance from each member's actual activity footprint instead — that
+# is where real workload imbalance (a carry, a ghost) actually shows up.
 
 # ── Phase C — behavioural flags ─────────────────────────────────────────────
 SYMPATHY_RATIO: Final[float] = 0.95  # contribution ratio on someone else's task
@@ -80,3 +87,6 @@ GHOST_TIER: Final[dict[str, float]] = {
     "tier2_days": 6,  # 6 consecutive zero-input days -> redistribute tasks
     "tier3_days": 10,  # 10 consecutive zero-input days -> faculty critical alert
 }
+# Tier-1 "drop" only applies once a student has an established footprint — otherwise
+# an inherently light-but-steady contributor gets cried over as a ghost.
+GHOST_TIER1_MIN_BASELINE: Final[int] = 4  # first-half events needed before drop counts

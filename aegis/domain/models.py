@@ -90,12 +90,28 @@ class ActivityEvent:
 
 
 @dataclass(frozen=True)
+class TeamMonitoring:
+    """Per-team progress signals that aren't derivable from raw activity events.
+
+    Keyed by project_id (one project = one team). Feeds the task_completion and
+    milestone components of the health score; engagement and workload balance come
+    from the ``activity_log``.
+    """
+
+    tasks_assigned: int
+    tasks_done: int
+    milestones_due: int
+    milestones_done: int
+
+
+@dataclass(frozen=True)
 class Cohort:
     """Everything one allocation run consumes."""
 
     students: tuple[Student, ...]
     projects: tuple[Project, ...]
     activity_log: tuple[ActivityEvent, ...]
+    monitoring: dict[str, TeamMonitoring] = field(default_factory=dict)
 
 
 # ── Outputs (built up by the engine) ────────────────────────────────────────
@@ -150,12 +166,23 @@ class DuplicateFlag:
     similarity: float
 
 
+@dataclass(frozen=True)
+class TaskAllocation:
+    team_id: str
+    project_id: str
+    hours: dict[str, float]  # student_id -> assigned hours (after the guard)
+    utilisation: dict[str, float]  # student_id -> U(i) = assigned / capacity
+    overloaded: list[str] = field(default_factory=list)
+    unallocated_hours: float = 0.0  # hours shed by the overload guard
+    zero_capacity: list[str] = field(default_factory=list)  # members with no capacity
+
+
 @dataclass
 class AllocationResult:
     """The single object ``engine.pipeline`` returns for a full A->B->C run."""
 
     teams: list[Team] = field(default_factory=list)
-    tasks: list[Task] = field(default_factory=list)
+    task_allocations: list[TaskAllocation] = field(default_factory=list)
     alerts: list[Alert] = field(default_factory=list)
     health: list[HealthReport] = field(default_factory=list)
     skill_matrices: list[SkillMatrix] = field(default_factory=list)

@@ -120,6 +120,13 @@ def test_sympathy_carry_case_present(cohort: Cohort) -> None:
     assert "STU_05" in {e.author_id for e in cohort.activity_log}
 
 
+def test_activity_tagging_coherent(cohort: Cohort) -> None:
+    """Every task-attributable event carries assigned_to, and vice-versa — so the
+    sympathy-carry denominator can't be silently diluted by untagged task work."""
+    for e in cohort.activity_log:
+        assert (e.task_id is None) == (e.assigned_to is None)
+
+
 def test_duplicate_pair_distinct_projects(cohort: Cohort) -> None:
     """The engineered near-duplicate pair exists as two separate submissions."""
     ids = {p.project_id for p in cohort.projects}
