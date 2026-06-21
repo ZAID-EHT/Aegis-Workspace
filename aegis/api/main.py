@@ -13,6 +13,7 @@ Endpoints:
 
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 
 from fastapi import FastAPI, HTTPException
@@ -40,6 +41,12 @@ app.add_middleware(
 # ── cached engine run (seed is static; one run serves every endpoint) ────────
 @lru_cache(maxsize=1)
 def _cohort() -> Cohort:
+    # Live Supabase when configured (SUPABASE_URL set); otherwise the bundled seed,
+    # so offline dev and tests keep working with zero setup.
+    if os.environ.get("SUPABASE_URL"):
+        from aegis.adapters.repo_db import load_db_cohort
+
+        return load_db_cohort()
     return load_cohort()
 
 

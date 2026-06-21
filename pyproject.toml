@@ -3,10 +3,12 @@ name = "aegis"
 version = "0.1.0"
 description = "AEGIS — evidence-weighted capstone allocation engine (CIPHER 2.0)"
 requires-python = ">=3.13"
-# fastapi/uvicorn land in Phase D.
 dependencies = [
     "scikit-learn>=1.6",  # Phase A dedupe (TF-IDF cosine)
     "matching>=1.4",      # Phase B Abraham–Manlove SPA
+    "fastapi>=0.116",     # Phase D API
+    "uvicorn>=0.30",      # ASGI server for the API
+    "supabase>=2.3",      # live data source (read adapter + loader)
 ]
 
 [tool.ruff]
@@ -15,6 +17,10 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# long descriptive mock project abstracts are data, not code
+"aegis/adapters/repo_mock.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.13"
