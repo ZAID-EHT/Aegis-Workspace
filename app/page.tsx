@@ -153,20 +153,33 @@ function SkillCheck({ student }: { student: StudentProfile }) {
 }
 
 // ── things to review ──────────────────────────────────────────────────────────
-function ReviewPanel({ data }: { data: RunResponse }) {
+function ReviewPanel({ data, lookups }: { data: RunResponse; lookups: Lookups }) {
   const dup = data.duplicate_flags[0];
+  const titleA = dup ? lookups.projectTitle(dup.project_a) : null;
+  const titleB = dup ? lookups.projectTitle(dup.project_b) : null;
   return (
     <Card className="flex flex-col gap-5 p-6">
       <h3 className="text-base font-semibold text-foreground">Things to review</h3>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-2">
         <span className="flex items-center gap-2 text-sm text-foreground">
           <Copy className="h-4 w-4 text-muted-foreground" /> Similar project ideas
         </span>
         {dup ? (
-          <StatusBadge tone="at_risk">{Math.round(dup.similarity * 100)}% alike</StatusBadge>
+          <div className="rounded-2xl bg-[color-mix(in_oklch,var(--at-risk)_11%,transparent)] p-3.5">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold" style={{ color: "var(--at-risk-ink)" }}>
+                Two proposals overlap
+              </span>
+              <StatusBadge tone="at_risk">{Math.round(dup.similarity * 100)}% match</StatusBadge>
+            </div>
+            <ul className="mt-2 flex flex-col gap-1 text-sm text-foreground">
+              <li className="truncate">{titleA ?? "Project A"}</li>
+              <li className="truncate">{titleB ?? "Project B"}</li>
+            </ul>
+          </div>
         ) : (
-          <span className="text-sm text-muted-foreground">None</span>
+          <p className="text-sm text-muted-foreground">None flagged.</p>
         )}
       </div>
 
@@ -371,7 +384,7 @@ export default function Page() {
                 )}
               </motion.div>
               <motion.div variants={rise}>
-                <ReviewPanel data={data} />
+                <ReviewPanel data={data} lookups={lookups} />
               </motion.div>
             </motion.div>
 

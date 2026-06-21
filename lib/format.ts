@@ -61,9 +61,11 @@ export function utilisationPct(u: number | null): string {
 export function makeLookups(students: StudentProfile[], teams: TeamView[]) {
   const nameOf = new Map(students.map((s) => [s.student_id, s.name]));
   const teamLabelOf = new Map(teams.map((t) => [t.team_id, t.project_title]));
+  const projectTitleOf = new Map(teams.map((t) => [t.project_id, t.project_title]));
   return {
     name: (id: string | null) => (id ? (nameOf.get(id) ?? id) : ""),
     teamLabel: (id: string | null) => (id ? (teamLabelOf.get(id) ?? "Team") : ""),
+    projectTitle: (id: string | null) => (id ? (projectTitleOf.get(id) ?? null) : null),
   };
 }
 
