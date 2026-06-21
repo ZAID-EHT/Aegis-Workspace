@@ -88,7 +88,7 @@ export function CardZoom({
                     type="button"
                     aria-label="Close"
                     onClick={() => setOpen(false)}
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-muted-foreground transition-colors hover:bg-secondary/80 hover:text-foreground"
+                    className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-muted-foreground transition-colors hover:bg-secondary/80 hover:text-foreground"
                   >
                     <X className="h-4 w-4" />
                   </button>

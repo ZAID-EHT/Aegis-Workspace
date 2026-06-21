@@ -60,7 +60,7 @@ function UserCard({
         onClick={onSignOut}
         aria-label="Sign out"
         title="Sign out"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
       >
         <LogOut className="h-4 w-4" />
       </button>

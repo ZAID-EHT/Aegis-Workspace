@@ -2,11 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Info, Loader2, ShieldAlert, TriangleAlert } from "lucide-react";
+import { Info, ShieldAlert, TriangleAlert } from "lucide-react";
 
 import { AppShell } from "@/components/aegis/app-shell";
 import { Card } from "@/components/ui/card";
-import { AlertRow, SampleBadge, StatTile, rise, stagger } from "@/components/dashboard";
+import {
+  AlertRow,
+  AlertRowSkeleton,
+  SampleBadge,
+  StatTile,
+  StatTileSkeleton,
+  rise,
+  stagger,
+} from "@/components/dashboard";
 import { routeFor } from "@/lib/nav";
 import { useRun } from "@/lib/use-run";
 
@@ -29,9 +37,18 @@ export default function AlertsPage() {
         </div>
 
         {!data || !lookups ? (
-          <Card className="flex items-center justify-center gap-3 p-12 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Checking the cohort…
-          </Card>
+          <>
+            <div className="grid grid-cols-3 gap-4">
+              {[0, 1, 2].map((i) => (
+                <StatTileSkeleton key={i} />
+              ))}
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <AlertRowSkeleton key={i} />
+              ))}
+            </div>
+          </>
         ) : (
           <>
             <motion.div

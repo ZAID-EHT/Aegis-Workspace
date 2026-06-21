@@ -2,11 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { AlertTriangle, Loader2, ShieldCheck, Users } from "lucide-react";
+import { AlertTriangle, ShieldCheck, Users } from "lucide-react";
 
 import { AppShell } from "@/components/aegis/app-shell";
-import { Card } from "@/components/ui/card";
-import { SampleBadge, StatTile, TeamCard, rise, stagger } from "@/components/dashboard";
+import {
+  SampleBadge,
+  StatTile,
+  StatTileSkeleton,
+  TeamCard,
+  TeamCardSkeleton,
+  rise,
+  stagger,
+} from "@/components/dashboard";
 import { SUMMARY } from "@/lib/labels";
 import { routeFor } from "@/lib/nav";
 import { useRun } from "@/lib/use-run";
@@ -30,9 +37,18 @@ export default function TeamsPage() {
         </div>
 
         {!data ? (
-          <Card className="flex items-center justify-center gap-3 p-12 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Forming teams…
-          </Card>
+          <>
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+              {[0, 1, 2].map((i) => (
+                <StatTileSkeleton key={i} />
+              ))}
+            </div>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <TeamCardSkeleton key={i} />
+              ))}
+            </div>
+          </>
         ) : (
           <>
             <motion.div

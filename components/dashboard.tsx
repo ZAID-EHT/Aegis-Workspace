@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
 import { CardZoom } from "@/components/ui/card-zoom";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { AlertView, RunResponse, StudentProfile, TeamView } from "@/lib/api";
 import { type makeLookups, titleCase, utilisationPct } from "@/lib/format";
 import { HEALTH_COMPONENT, RECOMMENDATION, band, friendlyAlert } from "@/lib/labels";
@@ -311,5 +312,54 @@ export function SampleBadge() {
     <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
       Sample data
     </span>
+  );
+}
+
+// ── loading skeletons (shape-matched to the real cards) ──────────────────────
+export function StatTileSkeleton() {
+  return (
+    <Card className="flex items-center gap-4 p-5">
+      <Skeleton className="h-11 w-11 rounded-2xl" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-6 w-10" />
+        <Skeleton className="h-3 w-20" />
+      </div>
+    </Card>
+  );
+}
+
+export function TeamCardSkeleton() {
+  return (
+    <Card className="flex flex-col gap-5 p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-2.5">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-6 w-24 rounded-full" />
+        </div>
+        <Skeleton className="h-[84px] w-[84px] rounded-full" />
+      </div>
+      <div className="h-px bg-border/60" />
+      <div className="space-y-3">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="flex items-center justify-between">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-9" />
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+export function AlertRowSkeleton() {
+  return (
+    <div className="rounded-2xl border border-border/60 bg-card p-4 shadow-card">
+      <div className="flex items-center justify-between gap-2">
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-5 w-16 rounded-full" />
+      </div>
+      <Skeleton className="mt-2.5 h-3 w-full" />
+      <Skeleton className="mt-1.5 h-3 w-2/3" />
+    </div>
   );
 }
