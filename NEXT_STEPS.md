@@ -1,88 +1,68 @@
-# NEXT STEPS — autonomous pre-demo pass (read me first)
+# NEXT_STEPS.md — your ordered run-list (live-capture prep)
 
-This was an autonomous run under hard constraints: **safe, reversible work only; nothing applied
-to the live DB or live auth; engine untouched.** A checkpoint commit was made before any change.
+C1 is done. This pass added the **live-capture runbook** and re-verified the auth audit + draft
+migration. Nothing here touched the live DB or live auth; everything below is yours to execute.
+A checkpoint commit precedes this work, so it's all reversible.
 
----
-
-## What I did (applied — safe, reversible, all in git)
-
-1. **Doc reconciliation (Task 1).** `BUILD_NOTES_PDF.md` rewritten to the **two-run framing** so it
-   no longer calls `0.96` a "live" value. Seed run = `0.96 / 84·69·41 / STU_08 / STU_07` (grounded
-   in `aegis/seed/seed.json`); live run = `0.911 / 15 teams + 1 exception pool / UUIDs`. Added a
-   side-by-side run table and corrected the `[FIG]` source-run mapping. No invented numbers.
-
-2. **Auth audit (Task 2).** `AUTH_AUDIT.md` — full read-only trace of Google login → callback →
-   session → `profiles`/role → routing. **Changed no code.** Read it before the demo; the headline
-   findings are in §6 and the pre-demo checklist in §7. Most urgent items:
-   - **[BLOCKER]** the FastAPI `/admin/*` endpoints are **unauthenticated** — anyone who can reach
-     `NEXT_PUBLIC_API_URL` can read governance data and approve/reject accounts (§6). *(Reported
-     only; `aegis/` was not modified per the run rules.)*
-   - **[VERIFY]** the `on auth.users` trigger that creates profiles exists **only in the live DB**,
-     in no tracked migration (§4) — `0006` re-asserts it.
-
-## What's drafted but NOT applied (needs your review + a manual apply)
-
-3. **`supabase/migrations/0006_staff_directory.sql` (Task 3) — DRAFT, not run anywhere.**
-   - Creates `staff_directory(email PK, role in ('lecturer','admin'))`, admin/service_role-write-only
-     via RLS (default-deny; this is the role-escalation surface).
-   - Rewrites `handle_new_user()` so role comes ONLY from the directory lookup (by email) or the
-     hard-coded `'student'` default — **never** from `raw_user_meta_data`. Restores the
-     `SET search_path` hardening that `0004` was missing.
-   - Re-asserts the `on auth.users` trigger (the §4 gap). Section 4 can be commented out if you
-     don't want to touch `auth.users`.
-   - The file's header has a **BEFORE-YOU-APPLY checklist** — read it; do not skip the schema-column
-     check.
-4. **`supabase/staff_directory_seed.example.sql`** — committed template (placeholder emails only).
-5. **`.gitignore`** — now ignores `supabase/staff_directory_seed.local.sql` and `**/*_seed.local.sql`
-   so the real-email seed file never commits.
-
-> Untracked `scripts/seed_demo_users.py` was present before this run (pre-existing demo infra). I
-> left it untracked — it's yours to commit or not.
+**Prepared for you (safe, committed):**
+- `CAPTURE_SESSION.md` — the at-the-dashboard runbook (start services, verify 0.911/15-teams, grab
+  health bands, capture the 3 figures from the right cohort, crop guidance).
+- `AUTH_AUDIT.md` — read-only login→callback→session→role→redirect trace + demo-day failure modes
+  (verified to cover: consent Testing mode, unverified-app interstitial, redirect/origin mismatch,
+  first-login race, session persistence). **No code changed.**
+- `supabase/migrations/0006_staff_directory.sql` — **DRAFT, not applied.** admin/service_role-write-only
+  `staff_directory` + RLS; `handle_new_user` sources role ONLY from the directory lookup or the
+  hard-coded `'student'` default (never `raw_user_meta_data`); `SET search_path` pinned; begin/commit;
+  before-you-apply header.
+- `supabase/staff_directory_seed.example.sql` (template) + `.gitignore` rule so the real-email
+  `*.local.sql` seed never commits.
 
 ---
 
-## Exact ordered steps for YOU when you're back
+## The four steps, in order
 
-**A. Review (5 min)**
-1. Read `AUTH_AUDIT.md` (esp. §1, §3, §6 BLOCKER, §7 checklist).
-2. Read the header of `supabase/migrations/0006_staff_directory.sql` and the body. Confirm the
-   `profiles` column list matches your live schema (`id, email, role, cohort_id, status`). **If your
-   live `profiles` differs, fix the INSERT column list before applying.**
+### 1 · Live capture session  →  follow `CAPTURE_SESSION.md`
+- Start backend (`uvicorn`, with `$env:SUPABASE_URL` set) + frontend (`pnpm dev`).
+- Confirm the **live** cohort by **student count = 70** (there is no "adapter active" log line — the
+  runbook explains why and gives the real check).
+- Run `/run` and **verify**: duplicate cosine **= 0.911** (flag if shifted), **15 teams + 1 exception
+  pool**, and record the **health-band distribution** (`$r.teams | Group-Object band`).
+- Capture **FIG 1 (pipeline stepper) from the LIVE run**; restart uvicorn **without** `SUPABASE_URL`
+  to drop to the **seed** cohort, then capture **FIG 2 (bands 84/69/41)** and **FIG 3 (alerts STU_07 +
+  STU_01/STU_05)** from the **SEED run**.
 
-**B. Apply the migration (after review)**
-3. Apply `0006` to a **non-prod** Supabase project first (SQL editor). Verify:
-   - `staff_directory` exists with RLS on; a non-admin client cannot write it.
-   - `select tgname from pg_trigger where tgrelid='auth.users'::regclass and not tgisinternal;`
-     shows `on_auth_user_created`.
-4. When happy, apply `0006` to the **live** project (it's the next migration after `0005`).
+### 2 · Fill live health bands + re-render
+- Put the recorded live distribution into:
+  - HTML **§5.2** (leave §5.1's 84/69/41 as the seed values), and
+  - `BUILD_NOTES_PDF.md` Two-run framing table — replace the **"not separately reported"** cell.
+- Drop the 3 PNGs into the matching `.figbox` blocks in the HTML.
+- Re-render the PDF with the headless-Chrome command at the top of `BUILD_NOTES_PDF.md`.
+- If the live cosine came back **≠ 0.911**, update §2.2/§5.2 + the framing table to the real value —
+  do not leave 0.911 if the run disagrees. (Invent nothing.)
 
-**C. Seed staff + judge access**
-5. **staff_directory:** copy `supabase/staff_directory_seed.example.sql` →
-   `supabase/staff_directory_seed.local.sql` (gitignored), put the **real** lecturer/admin emails in
-   it, run it in the SQL editor. Verify with
-   `select email, role from public.staff_directory order by role;`.
-6. **Google consent screen:** Cloud Console → APIs & Services → OAuth consent screen → **Test users
-   → add every judge's Gmail** (AUTH_AUDIT §1). Confirm the Authorized redirect URI is
-   `https://<ref>.supabase.co/auth/v1/callback` and that Supabase Redirect URLs include your demo
-   origin's `/auth/callback` (§3).
+### 3 · Apply auth changes (the gate — review first)
+- Read the **header checklist** in `0006_staff_directory.sql`; confirm your live `profiles` columns
+  match the INSERT list. Apply `0006` to a **non-prod** project first, then live.
+- Add judge emails in **two** places (see `AUTH_AUDIT.md` §1, §6):
+  - **Google consent screen → Test users** (the #1 demo killer if missing), and
+  - **`staff_directory`** — copy `staff_directory_seed.example.sql` → `staff_directory_seed.local.sql`
+    (gitignored), put real lecturer/admin emails in, run it.
+- **Test login in incognito** as both: a **supervisor/lecturer** email (in the directory → expect
+  `lecturer` + `approved`) and a **student** email (not in directory → expect `student` + `pending`).
+- Note the `AUTH_AUDIT.md` §6 **[BLOCKER]**: the FastAPI `/admin/*` endpoints are unauthenticated —
+  keep that API private during the demo, or gate it before showing Governance.
 
-**D. Test both roles end-to-end**
-7. Sign up / log in with an email that **is** in `staff_directory` → expect `role=lecturer|admin`,
-   `status=approved`, correct scoped views.
-8. Sign up / log in with an email **not** in the directory → expect `role=student`,
-   `status=pending`.
-9. (If keeping the `/admin` demo) decide on the §6 BLOCKER: keep the FastAPI port private to your
-   machine, or add an auth check to `/admin/*` before showing Governance to anyone.
-10. Optional: re-run `python scripts/seed_demo_users.py` so the password-based judge accounts exist
-    as a Google-free fallback (AUTH_AUDIT §1).
-
-**E. Roll back if needed**
-- Everything from this run is in git (checkpoint commit precedes it) — `git revert` the work commit
-  to undo the docs/migration draft. `0006` was never applied, so there is nothing to undo in the DB.
+### 4 · Final commit + push
+- Commit the filled-in docs, re-rendered PDF, and the 3 figures.
+- `git push` to the public repo (confirm no secrets / no real emails staged — the gitignore rules
+  cover `.env*` and `*_seed.local.sql`).
 
 ---
 
-## Hard rules honoured this run
-- No live-DB writes. No migration applied. Engine (`aegis/`) not modified. `.env`/`.env.local` not
-  read. All artifacts reversible and committed.
+## Rollback
+Everything from this run is in git behind the checkpoint commit. `0006` was **never applied**, so
+there is nothing to undo in the database — `git revert` the work commit to drop the file changes.
+
+## Hard rules honoured this pass
+No live-DB writes, no migration applied, engine (`aegis/`) untouched, `.env`/`.env.local` not read,
+all artifacts reversible and committed.
