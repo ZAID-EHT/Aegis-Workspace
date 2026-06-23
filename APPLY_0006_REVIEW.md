@@ -60,6 +60,34 @@ writes it owns role assignment, so write must stay admin-only.
 
 ---
 
+## Hardening & idempotency confirmation (verbatim from the migration)
+
+| Property | Where (line) | Status |
+|---|---|---|
+| **`SECURITY DEFINER`** on `handle_new_user` | `language plpgsql security definer …` (L102) | ✔ present — runs as owner so it reads `staff_directory` despite RLS (no client read policy needed) |
+| **`SET search_path` pinned** | `… set search_path = public, pg_catalog` (L102) | ✔ pinned — restores hardening `0004` lacked; a caller path can't shadow `public`/`pg_catalog` |
+| **Transactional** | `begin;` (L59) … `commit;` (L135) | ✔ whole migration is one transaction — a mid-apply failure rolls back, nothing half-applied |
+| **Dependency guard** | `do $$ … raise exception … is_admin() …` (L62–70) | ✔ raises (and rolls back) if `is_admin()` is absent, instead of creating a broken policy |
+| **Idempotent — table** | `create table if not exists public.staff_directory` (L74) | ✔ re-runnable |
+| **Idempotent — policy** | `drop policy if exists … ; create policy …` (L88–89) | ✔ re-runnable |
+| **Idempotent — function** | `create or replace function … handle_new_user` (L101) | ✔ re-runnable |
+| **Idempotent — trigger** | `drop trigger if exists … ; create trigger …` (L130–131) | ✔ re-runnable |
+| **Idempotent — INSERT** | `insert into public.profiles … on conflict (id) do nothing` (L120–122) | ✔ a replayed signup never errors |
+| **`role` CHECK constraint** | `check (role in ('lecturer','admin'))` (L76) | ✔ `'student'` can't be stored → a typo can't grant an unexpected tier |
+| **Seed emails from gitignored source** | POST-APPLY note (L137–143) + `.gitignore` rule for `*_seed.local.sql` | ✔ committed file carries **no** real emails; real addresses go in `staff_directory_seed.local.sql` (gitignored) or via service_role upsert |
+
+> **One thing to decide at apply time (L43–46, L127–133):** section 4 re-asserts the
+> `on auth.users` trigger. It needs elevated rights on `auth.users`; in the Supabase **SQL editor
+> (postgres role)** it works. Keep it (closes the AUTH_AUDIT §4 "trigger lives only in live" gap) —
+> or comment it out if you don't want `0006` touching `auth.users`. Either way the rest applies.
+
+> **Schema-drift gate (the one real blocker, L37–40):** the function's `INSERT` targets
+> `profiles (id, email, role, cohort_id, status)`. If your **live** `profiles` has `full_name`/no
+> `email` (the H3 drift), reconcile the column list **before** applying — do not run against a
+> mismatched schema.
+
+---
+
 ## Ordered steps to apply live (you, at the dashboard)
 
 1. **Pre-check schema.** Confirm the live `profiles` columns are `(id, email, role, cohort_id,
