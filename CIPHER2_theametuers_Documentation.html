@@ -114,17 +114,17 @@
   <tr><td>contradicted</td><td>0.5</td><td>self-report contradicted by observed throughput</td></tr>
 </table>
 <p>The <span class="key">contradicted</span> tier is the Dunning&ndash;Kruger correction: when a high self-claim conflicts with measured task throughput, confidence is halved.</p>
-<p class="note"><b>Live case &mdash; STU_08.</b> Declares Technical <b>5.0</b> with no supporting evidence, contradicted by throughput &rarr; C&nbsp;=&nbsp;0.5 &rarr; <span class="formula" style="font-size:9.6pt; padding:1px 6px;">&Acirc; = 5.0 &times; 0.5 = 2.5</span>. The inflated claim is corrected before it can distort team formation; STU_08 ultimately lands in the critical team P_05.</p>
+<p class="note"><b>Demonstration scenario &mdash; STU_08.</b> In the 12-student engineered cohort (&sect;5.1), STU_08 declares Technical <b>5.0</b> with no supporting evidence, contradicted by throughput &rarr; C&nbsp;=&nbsp;0.5 &rarr; <span class="formula" style="font-size:9.6pt; padding:1px 6px;">&Acirc; = 5.0 &times; 0.5 = 2.5</span>. The inflated claim is corrected before it can distort team formation; STU_08 ultimately lands in the critical team P_05.</p>
 
 <h3>2.2 &nbsp; Duplicate detection &mdash; TF-IDF cosine gate</h3>
 <p>Project abstracts are vectorised with TF-IDF and compared by cosine similarity. Any pair scoring <b>&ge; 0.75</b> is flagged and blocked for supervisor review before allocation proceeds.</p>
-<p class="note"><b>Live case.</b> Projects <b>P_02</b> and <b>P_03</b> flagged at <b>0.96</b> &mdash; well above the 0.75 gate &mdash; and held for review rather than silently allocated as two distinct projects.</p>
+<p class="note"><b>Demonstration scenario.</b> In the engineered cohort (&sect;5.1), projects <b>P_02</b> and <b>P_03</b> flag at <b>0.96</b> &mdash; well above the 0.75 gate &mdash; and are held for review rather than silently allocated as two distinct projects. On the 70-student live cohort (&sect;5.2) the same gate flags a near-duplicate pair at <b>0.911</b>.</p>
 
 <h3>2.3 &nbsp; Matching &mdash; Student&ndash;Project Allocation (SPA)</h3>
 <p>Allocation uses the Abraham&ndash;Manlove Student&ndash;Project Allocation algorithm, honouring students' ranked project preferences against supervisor and project-capacity constraints &mdash; a stable matching rather than first-come allocation.</p>
 
 <h3>2.4 &nbsp; Formation &mdash; maximin floor-lifting</h3>
-<p>Teams are formed to maximise the capability of the <i>weakest</i> team (a maximin objective), rather than the average &mdash; deliberately lifting the floor so no team is left non-viable. The resulting health-band spread on the live cohort:</p>
+<p>Teams are formed to maximise the capability of the <i>weakest</i> team (a maximin objective), rather than the average &mdash; deliberately lifting the floor so no team is left non-viable. The resulting health-band spread on the 12-student engineered cohort (&sect;5.1):</p>
 <table>
   <tr><th>Team</th><th>Health score</th><th>Band</th></tr>
   <tr><td>P_04</td><td>84</td><td><span class="ok">Healthy</span></td></tr>
@@ -140,7 +140,7 @@
   <li><b>Burnout:</b> individual utilisation &ge; 2&times; the team average.</li>
   <li><b>Health-band alerts:</b> team score crossing into At-Risk or Critical bands.</li>
 </ul>
-<p class="note"><b>Live cases.</b> <b>STU_07</b> (team P_05) authors <b>zero events across all 14 sim-days</b> &mdash; a pure ghost, exceeding the 10-day Tier-3 threshold. In team P_01, <b>STU_01</b> authors <b>&ge; 0.95</b> of STU_05's assigned tasks (sympathy-carry), and STU_01's resulting 10-event load trips the <b>burnout</b> tripwire &mdash; carrier and carried surfaced together.</p>
+<p class="note"><b>Demonstration scenario.</b> In the engineered cohort (&sect;5.1), <b>STU_07</b> (team P_05) authors <b>zero events across all 14 sim-days</b> &mdash; a pure ghost, exceeding the 10-day Tier-3 threshold. In team P_01, <b>STU_01</b> authors <b>&ge; 0.95</b> of STU_05's assigned tasks (sympathy-carry), and STU_01's resulting 10-event load trips the <b>burnout</b> tripwire &mdash; carrier and carried surfaced together.</p>
 </div>
 
 <!-- §3 -->
@@ -179,31 +179,38 @@
 
 <!-- §5 -->
 <div class="section">
-<h2>5 &nbsp; Live Results</h2>
-<p>Running the full pipeline over the <b>70-student cohort</b> produces <b>15 teams + 1 exception pool</b>. Engineered probe students <i>within that cohort</i> each demonstrate one mechanism end-to-end:</p>
+<h2>5 &nbsp; Results</h2>
+<p>The <i>same engine code</i> runs over two cohorts, selected by a single environment switch (&sect;3): an engineered demonstration seed that exercises every mechanism, and the live Supabase cohort that shows production scale.</p>
+
+<h3>5.1 &nbsp; Demonstration scenario &mdash; 12-student engineered cohort</h3>
+<p>A hand-built 12-student / 8-project seed, <b>engineered so each formula fires visibly</b> &mdash; not a random sample. It forms 3 full teams with an empty exception pool, and surfaces exactly one case per mechanism:</p>
 <table>
-  <tr><th>Mechanism</th><th>Live evidence</th><th>Outcome</th></tr>
+  <tr><th>Mechanism</th><th>Engineered evidence (seed)</th><th>Outcome</th></tr>
   <tr><td>Evidence weighting</td><td>STU_08: declared 5.0, contradicted &rarr; &Acirc; = 5.0 &times; 0.5 = 2.5</td><td>Inflated claim corrected (amber)</td></tr>
   <tr><td>Duplicate detection</td><td>P_02 / P_03 cosine = 0.96 (&ge; 0.75 gate)</td><td>Blocked for review</td></tr>
   <tr><td>Ghosting (Tier-3)</td><td>STU_07: 0 events / 14 sim-days</td><td>Faculty critical alert</td></tr>
   <tr><td>Sympathy-carry + burnout</td><td>STU_01 authors &ge; 0.95 of STU_05's tasks; 10-event load</td><td>Carry + burnout alerts</td></tr>
   <tr><td>Formation spread</td><td>P_04 = 84 / P_01 = 69 / P_05 = 41</td><td>Healthy / At-Risk / Critical bands</td></tr>
 </table>
+<p class="note"><b>STU_01&ndash;STU_12</b> and <b>P_01&ndash;P_08</b> are synthetic seed identifiers that exist <i>only</i> in this demonstration cohort &mdash; engineered to make each mechanism fire on cue. They do not appear in the live cohort.</p>
+
+<h3>5.2 &nbsp; Scale result &mdash; 70-student live cohort</h3>
+<p>The identical engine runs end-to-end against the <b>live Supabase database</b> over a <b>70-student cohort</b>, producing <b>15 teams + 1 exception pool</b>. Students are keyed by <b>UUID</b> rather than STU_ identifiers, so the demonstration's named probe cases (STU_07, STU_08, &hellip;) do not exist here. The duplicate gate flags a near-duplicate project pair at <b>cosine 0.911</b> (&ge; the 0.75 gate) and holds it for review &mdash; the same governance behaviour as the seed, demonstrated at production scale.</p>
 
 <div class="figbox">
   <div class="ftag">[ FIG 1 ]</div>
-  <div class="fsub">Pipeline stepper &mdash; live dashboard (intake &rarr; de-dup &rarr; match &rarr; form &rarr; monitor)</div>
-  <div class="fdrop">drop screenshot here &middot; captured from the live-data dashboard</div>
+  <div class="fsub">Pipeline stepper &mdash; live dashboard, 70-student cohort (intake &rarr; de-dup &rarr; match &rarr; form &rarr; monitor)</div>
+  <div class="fdrop">drop screenshot here &middot; from the 70-student live run (&sect;5.2)</div>
 </div>
 <div class="figbox">
   <div class="ftag">[ FIG 2 ]</div>
   <div class="fsub">Team health bands &mdash; P_04 Healthy 84, P_01 At-Risk 69, P_05 Critical 41</div>
-  <div class="fdrop">drop screenshot here &middot; captured from the live-data dashboard</div>
+  <div class="fdrop">drop screenshot here &middot; from the 12-student demonstration run (&sect;5.1)</div>
 </div>
 <div class="figbox">
   <div class="ftag">[ FIG 3 ]</div>
   <div class="fsub">Alert inbox &mdash; STU_07 ghost (Tier-3) + STU_01/STU_05 carry &amp; burnout</div>
-  <div class="fdrop">drop screenshot here &middot; captured from the live-data dashboard</div>
+  <div class="fdrop">drop screenshot here &middot; from the 12-student demonstration run (&sect;5.1)</div>
 </div>
 </div>
 
@@ -231,7 +238,7 @@
 </div>
 
 <div class="foot">
-  AEGIS &middot; CIPHER 2.0 Scenario 03 &middot; Team Amateurs, IIT &middot; figures drawn from the live pipeline run and cited project material &middot; all data synthetic
+  AEGIS &middot; CIPHER 2.0 Scenario 03 &middot; Team Amateurs, IIT &middot; figures drawn from the demonstration and live pipeline runs and cited project material &middot; all data synthetic
 </div>
 
 </body>
