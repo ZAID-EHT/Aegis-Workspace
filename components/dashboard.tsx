@@ -8,6 +8,7 @@ import { AlertTriangle, Copy, Inbox, UserRound } from "lucide-react";
 
 import { EvidenceBar } from "@/components/aegis/evidence-bar";
 import { HealthRing } from "@/components/aegis/health-ring";
+import { OpenWorkspaceButton } from "@/components/aegis/open-workspace-button";
 import {
   Card,
   CardContent,
@@ -177,6 +178,8 @@ export function TeamCard({ team }: { team: TeamView }) {
           </li>
         ))}
       </ul>
+
+      <OpenWorkspaceButton variant="link" className="self-end" />
 
       {needsBalancing && (
         <p

@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Sparkles, Target, Users } from "lucide-react";
 
 import { HealthRing } from "@/components/aegis/health-ring";
+import { OpenWorkspaceButton } from "@/components/aegis/open-workspace-button";
 import { SampleDataBanner } from "@/components/aegis/sample-data-banner";
 import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
@@ -120,6 +121,7 @@ function MyTeamCard({ team }: { team: TeamView }) {
               {status.label}
             </StatusBadge>
           </div>
+          <OpenWorkspaceButton variant="button" className="mt-3" />
         </div>
         <HealthRing value={team.health_score} size={104} strokeWidth={11} showBand={false} />
       </div>
