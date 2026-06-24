@@ -92,7 +92,8 @@
 
 <!-- §1 -->
 <div class="section">
-<h2>1 &nbsp; Problem &amp; Solution</h2>
+<h2>1 &nbsp; Executive Summary</h2>
+<p class="lead"><b>AEGIS</b> replaces manual, opinion-driven capstone allocation with an evidence-gated, fully auditable pipeline. The <i>same engine</i> that powers the demonstration runs live against a <b>70-student cohort</b>, forming <b>15 balanced teams + 1 exception pool</b>, flagging a near-duplicate proposal at <b>cosine 0.911</b>, and raising <b>6 governed monitoring alerts</b> &mdash; with every state-changing decision recorded in an append-only, hash-chained audit log. <span class="mono">(All headline figures live &mdash; &sect;5.2.)</span></p>
 <p class="lead"><b>The problem.</b> Allocating students to capstone projects and teams is, in most institutions, a manual and opinion-driven exercise. Skills are taken from self-declaration at face value &mdash; so a confident over-claimer outranks a quiet expert; near-duplicate project topics slip past tired reviewers; and disengagement or free-riding only surfaces at the final viva, when it is too late to intervene. None of it leaves an auditable trail, so allocation decisions cannot be defended when challenged.</p>
 <p class="lead"><b>What AEGIS does.</b> AEGIS is an evidence-gated pipeline &mdash; <span class="mono">intake &rarr; de-duplicate &rarr; match &rarr; form &rarr; monitor</span> &mdash; that treats every self-declared skill as a <i>claim to be weighted by its evidence</i>, not a fact. Unproven claims are discounted, near-duplicate projects are blocked for review before allocation, teams are formed to lift the weakest team rather than the average, and engagement is monitored continuously so faculty are alerted to ghosting, sympathy-carrying and burnout while there is still time to act.</p>
 <p class="lead"><b>What it is.</b> A pure Python decision engine driving a Next.js dashboard over a Supabase&nbsp;/&nbsp;Postgres database, with object-scoped Row-Level Security and an append-only, hash-chained audit log as the governance substrate. Every state-changing action is recorded; every allocation is explainable.</p>
@@ -160,7 +161,8 @@
   <li><b>Engine purity.</b> The engine imports <i>nothing</i> from the adapter layer &mdash; it operates on plain domain objects, so it is unit-testable on fixed data with no database in the loop.</li>
   <li><b>Adapter env-switch.</b> A single environment switch flips the data source between the synthetic seed and the live Supabase database <i>without any change to engine code</i> &mdash; the same logic runs in demo and production.</li>
   <li><b>Governance substrate.</b> Supabase Postgres with Row-Level Security enforces who can read which rows; the API never returns data the caller is not entitled to.</li>
-  <li><b>Drive integration.</b> Team workspace provisioning runs on OAuth-as-user with least-privilege scopes (see &sect;4).</li>
+  <li><b>Role-based dashboard.</b> One Next.js app renders by role from the authoritative <span class="mono">profiles.role</span>: a <b>student</b> sees only their own team workspace; a <b>lecturer</b> sees cohort-wide monitoring (teams, health, alerts); an <b>admin</b> additionally sees the governance console (&sect;4).</li>
+  <li><b>Drive integration.</b> Per-team Google Docs workspace provisioning (folder + report / tracker / deck) runs on OAuth-as-user with least-privilege scopes (&sect;4). The activity-ingestion read path is <b>built</b>, but live engagement attribution is <b>deferred</b>: on a consumer-account share the Drive Activity API exposes an actor id, not an email, so faculty-grade attribution needs a Google Workspace Shared Drive (&sect;6). Health today runs on representative seed activity.</li>
 </ul>
 </div>
 
@@ -171,6 +173,7 @@
 <ul>
   <li><b>OWASP API1:2023 (BOLA) remediation.</b> The <span class="mono">team_monitoring</span> surface was hardened from authentication-only to <b>object-scoped RLS</b>: an authenticated user can no longer read another team's monitoring rows &mdash; access is checked against row ownership, not merely a valid session.</li>
   <li><b>OWASP API5:2023 (function-level authorization).</b> The governance API's <span class="mono">/admin/*</span> endpoints run on the service_role backend and therefore bypass RLS, so they are gated by a <b>single server-side dependency applied uniformly to every admin route</b> (no route can be added ungated). A caller must present a <b>token-verified identity whose authoritative <span class="mono">profiles.role</span> is <span class="mono">admin</span></b> &mdash; the same column RLS trusts, never client-supplied metadata; the trusted backend writer authenticates with the service_role key, constant-time compared. Evidence (automated tests): an unauthenticated caller &rarr; <span class="mono">401</span>, an authenticated non-admin &rarr; <span class="mono">403</span>, an admin token &rarr; <span class="mono">200</span> &mdash; the API is not a way around RLS.</li>
+  <li><b>Three-tier role boundary &mdash; <span class="ok">verified live in the running app</span>.</b> Function-level authorization is demonstrated end-to-end, not only unit-tested: a <b>student</b> reaches only their own workspace; a <b>lecturer</b> reaches cohort monitoring (teams, health, alerts) but <b>not</b> governance; an <b>admin</b> reaches full monitoring <b>plus</b> the governance console (audit log, approvals, integrity badge). <span class="mono">/admin</span> and <span class="mono">/governance</span> redirect any non-admin away from the panel. This three-tier boundary was confirmed by an <b>independent browser audit</b> of the live application &mdash; authorization enforced in the running product, not merely at the API edge.</li>
   <li><b>Three-tier RLS verification.</b> Verification distinguishes <i>toggle-exists</i> &ne; <i>policy-exists</i> &ne; <b>policy-enforces</b>. RLS being "on" is necessary but not sufficient; enforcement is confirmed at the row level, not at the toggle.</li>
   <li><b>Privilege-escalation controls.</b> The <span class="mono">audit_log</span> is <b>append-only and hash-chained</b> (each entry binds the previous, so tampering is detectable). User <b>role is hard-forced server-side</b> &mdash; a client cannot assign itself a privileged role.</li>
   <li><b>Least-privilege Drive.</b> The integration requests only <span class="mono">drive.file</span> + <span class="mono">drive.activity.readonly</span>, acting as the user via OAuth. The app can touch only the files it itself created &mdash; never the user's wider Drive.</li>
@@ -199,6 +202,25 @@
 
 <h3>5.2 &nbsp; Scale result &mdash; 70-student live cohort</h3>
 <p>The identical engine runs end-to-end against the <b>live Supabase database</b> over a <b>70-student cohort</b>, producing <b>15 teams + 1 exception pool</b>. Students are keyed by <b>UUID</b> rather than STU_ identifiers, so the demonstration's named probe cases (STU_07, STU_08, &hellip;) do not exist here. The duplicate gate flags a near-duplicate project pair at <b>cosine 0.911</b> (&ge; the 0.75 gate) and holds it for review &mdash; the same governance behaviour as the seed, demonstrated at production scale.</p>
+<table>
+  <tr><th>Health band &mdash; live 70-student cohort</th><th>Teams</th></tr>
+  <tr><td><span class="ok">Healthy</span></td><td>11</td></tr>
+  <tr><td>At-Risk</td><td>4</td></tr>
+  <tr><td><span class="key">Critical</span></td><td>0</td></tr>
+</table>
+<p>This live distribution &mdash; <b>11 Healthy / 4 At-Risk / 0 Critical</b> (live) &mdash; is deliberately distinct from the engineered seed's one-of-each spread of <b>84 / 69 / 41</b> (&sect;5.1), and the contrast <i>is</i> the point of the two-run framing. The seed is hand-built so every failure mode (ghost, sympathy-carry, burnout, a critical-band team) fires on cue for inspection; the live run shows the <i>same engine</i> producing <b>well-formed teams at scale with no critical-band team</b>. The two number sets are never interchangeable: the <span class="mono">STU_/P_</span> identifiers and 84/69/41 belong only to the seed (&sect;5.1); the 70 / 15+1 / 0.911 / 11&middot;4&middot;0 figures belong only to the live run (&sect;5.2).</p>
+
+<h3>5.3 &nbsp; Two-role flow (live)</h3>
+<p>The same live data drives both roles at once. A <b>student</b> signs in and sees only their own team's workspace and health; a <b>lecturer or admin</b> signs in on a separate account and monitors all <b>15 teams</b>, the health bands, the alert inbox, and &mdash; for an admin &mdash; the governance console. Both sessions run simultaneously on different accounts without interference; the role boundary that separates them is the live-verified control in &sect;4.</p>
+
+<h3>5.4 &nbsp; Judge access &mdash; demo accounts</h3>
+<p>Sign in at the dashboard login page with email + password (no Google sign-in required). These are <b>throwaway demo accounts on synthetic data</b> (<span class="mono">@aegis.test</span>, RFC&nbsp;2606) &mdash; they correspond to no real person and are revoked after judging.</p>
+<table>
+  <tr><th>Role</th><th>Email</th><th>Password</th><th>Lands on</th></tr>
+  <tr><td>Student</td><td class="mono">judge.student@aegis.test</td><td class="mono">AegisJudge-Student-2026</td><td>Own team workspace</td></tr>
+  <tr><td>Lecturer</td><td class="mono">judge.lecturer@aegis.test</td><td class="mono">AegisJudge-Lecturer-2026</td><td>Cohort monitoring (no governance)</td></tr>
+  <tr><td>Admin</td><td class="mono">judge.admin@aegis.test</td><td class="mono">AegisJudge-Admin-2026</td><td>Full monitoring + governance</td></tr>
+</table>
 
 <div class="figbox">
   <div class="ftag">[ FIG 1 ]</div>
