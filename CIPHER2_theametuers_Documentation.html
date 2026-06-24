@@ -234,6 +234,8 @@
   <li><b>Unauthenticated data routes (post-submission).</b> The engine read/compute routes are not yet per-request authenticated (only the governance API is); production extends the same token check to them, with the dashboard sending its session JWT. Mitigated at prototype scale by port isolation, restricted CORS, and write-back off by default.</li>
   <li><b>Governance fail-open (fix-first, post-submission).</b> On a live error the governance endpoints currently fall back to seed data, so a broken live audit feed could render a green &ldquo;Verified&rdquo; badge. The fix is to fail <b>closed</b> &mdash; return an explicit degraded state (HTTP&nbsp;503) rather than silently serving seed for an integrity read. (Backlog S2.)</li>
   <li><b>Drive provisioning not idempotent (post-submission).</b> <span class="mono">POST /api/drive/provision</span> creates a new folder each call; re-posting for a team that already has one makes a duplicate. The fix is to check the team's existing <span class="mono">drive_folder_id</span> first and short-circuit. Admin-only and called once at allocation time today, so not reachable in normal use. (Backlog D1.)</li>
+  <li><b>Drive activity polling auth (post-submission).</b> The Drive-activity poll endpoint authenticates with a shared scheduler secret rather than a per-user identity; production should scope and rotate that secret (or run polling entirely behind the service backend). Not user-reachable in the demo.</li>
+  <li><b>Content-Security-Policy for embeds (post-submission).</b> The embedded Google Docs iframes should be constrained by an explicit CSP <span class="mono">frame-src https://docs.google.com</span> rather than a wildcard &mdash; deferred as production hardening.</li>
 </ul>
 </div>
 

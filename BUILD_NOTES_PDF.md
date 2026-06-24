@@ -3,7 +3,7 @@
 **Produced file (exact name, verified char-for-char):** `CIPHER2_theametuers_Documentation.pdf`
 **Throwaway source:** `CIPHER2_theametuers_Documentation.html` (the HTML the PDF was rendered from)
 **Build method:** standalone HTML → headless Chrome (`--headless=new --no-pdf-header-footer --print-to-pdf`). UTF-8; no LaTeX.
-**Length:** 4 pages (A4). **Status:** unstaged / not committed — left for your review.
+**Length:** 5 pages (A4 — grew from 4 when the §4/§6 security items were added). **Status:** committed.
 **Glyph check (rendered correctly in the PDF):** `Â = L × C`, `≥`, `×`, `→`, `↔`, `≠`, `§` — no mojibake.
 
 ---
