@@ -9,6 +9,10 @@ guard, sample-data banner, §4/§6 security docs, re-rendered 5-page PDF). Serve
 frontend `http://localhost:3000`, backend `:8000` in live mode (`/run` → 70 students / 15 teams).
 Demo accounts (password): `judge.student` / `judge.lecturer` / `judge.admin` @aegis.test.
 
+> **✅ DONE (2026-06-25) — Governance routing fix** (`b7ff767`, pushed). Verified in-browser:
+> clicking **Governance** and typing **/governance** both load the panel (audit log + approvals +
+> integrity badge). `/governance` no longer 404s; the nav reliably reaches the panel.
+
 ---
 
 ## a. Browser-verify M1 (the role-of-record proof)
@@ -16,7 +20,7 @@ Demo accounts (password): `judge.student` / `judge.lecturer` / `judge.admin` @ae
    own team + team health + their details. No Teams/Alerts/Governance nav. (Hard-refresh
    Ctrl+Shift+R if a stale tab is open.)
 2. **Admin:** sign in as `judge.admin@aegis.test` → full monitoring (Overview/Teams/Alerts/Pipeline)
-   **and** Governance loads.
+   **and** Governance loads. ✅ *Governance reachability verified 2026-06-25 (`b7ff767`).*
 3. **M1 proof — the key test:** an account whose role is set **only** in `profiles.role='admin'`
    (no `user_metadata.role`) must now land on the **admin** view (pre-M1 it wrongly showed the
    student view). Use your Google demo admin, or temporarily clear an account's metadata role.
@@ -76,4 +80,4 @@ backup in place first (`python scripts/backup_db.py`), non-prod before live. See
 ---
 **T-minus checks:** judge emails in Google consent **Test users** *and* (if using directory roling)
 `staff_directory`; redirect URIs match the demo origin (`localhost` ≠ `127.0.0.1`); both fallback
-password accounts log in; Governance loads as admin.
+password accounts log in; Governance loads as admin (✅ routing verified `b7ff767`).
