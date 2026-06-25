@@ -101,7 +101,7 @@ export function HealthRing({
           <span className="nums text-3xl font-semibold tabular-nums text-foreground">
             {display}
           </span>
-          <span className="text-[0.625rem] font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             Health
           </span>
         </div>

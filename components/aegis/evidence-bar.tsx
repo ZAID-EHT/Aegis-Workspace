@@ -49,7 +49,7 @@ export function EvidenceBar({
         <span className="text-sm font-medium text-foreground">{discipline}</span>
         <span
           className={cn(
-            "nums rounded-full px-2 py-0.5 text-[0.6875rem] font-medium",
+            "nums rounded-full px-2 py-0.5 text-xs font-medium",
             corrected
               ? "bg-[color-mix(in_oklch,var(--at-risk)_16%,transparent)] text-[var(--at-risk-ink)]"
               : "bg-muted text-muted-foreground",
@@ -77,7 +77,7 @@ export function EvidenceBar({
         />
       </div>
 
-      <div className="nums flex justify-between text-[0.6875rem] text-muted-foreground">
+      <div className="nums flex justify-between text-xs text-muted-foreground">
         <span>Claimed {declared.toFixed(1)}</span>
         <span className={cn(corrected && "font-medium text-foreground")}>
           Counted {adjusted.toFixed(1)}

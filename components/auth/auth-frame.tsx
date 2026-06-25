@@ -48,8 +48,8 @@ export function AuthFrame({
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 14 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-3xl border border-border/60 bg-card p-8 shadow-card-lg"
         >

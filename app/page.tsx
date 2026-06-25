@@ -139,7 +139,7 @@ export default function LandingPage() {
                 </div>
                 <div className="text-left">
                   <p className="text-xs font-medium text-foreground">Team health</p>
-                  <p className="text-[0.7rem]" style={{ color: "var(--healthy-ink)" }}>On track</p>
+                  <p className="text-xs" style={{ color: "var(--healthy-ink)" }}>On track</p>
                 </div>
               </div>
             </FloatCard>
@@ -150,7 +150,7 @@ export default function LandingPage() {
                 <Copy className="h-4 w-4" style={{ color: "var(--at-risk-ink)" }} />
                 <div className="text-left">
                   <p className="text-xs font-medium text-foreground">Similar proposals</p>
-                  <p className="text-[0.7rem] tabular-nums" style={{ color: "var(--at-risk-ink)" }}>
+                  <p className="text-xs tabular-nums" style={{ color: "var(--at-risk-ink)" }}>
                     0.911 match · held for review
                   </p>
                 </div>
@@ -165,14 +165,14 @@ export default function LandingPage() {
                 </div>
                 <div className="text-left">
                   <p className="text-xs font-medium text-foreground">15 teams + 1 pool</p>
-                  <p className="text-[0.7rem] text-muted-foreground">from 70 students</p>
+                  <p className="text-xs text-muted-foreground">from 70 students</p>
                 </div>
               </div>
             </FloatCard>
 
             {/* — bottom-right: integrations — */}
             <FloatCard className="bottom-14 right-6 rotate-2 xl:right-16" delay="-4.5s">
-              <p className="mb-2 text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Integrations
               </p>
               <div className="flex items-center gap-2">

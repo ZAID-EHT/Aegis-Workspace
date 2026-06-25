@@ -69,18 +69,16 @@ export function CardZoom({
                 role="dialog"
                 aria-modal="true"
                 onClick={() => setOpen(false)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={false}
                 transition={{ duration: 0.18, ease: EASE }}
               >
-                <div className="absolute inset-0 bg-foreground/30 backdrop-blur-[3px]" />
+                <div className="absolute inset-0 bg-foreground/35" />
                 <motion.div
                   className="relative w-full max-w-md"
                   onClick={(e) => e.stopPropagation()}
-                  initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.94, y: 8 }}
+                  initial={{ scale: 0.98, y: 12 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.98, y: 8 }}
                   transition={{ duration: 0.26, ease: EASE }}
                 >
                   {preview}

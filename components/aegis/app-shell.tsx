@@ -154,7 +154,7 @@ export function AppShell({ active = "overview", onNavigate, rail, children }: Ap
       />
 
       {/* MOBILE TOP BAR */}
-      <header className="sticky top-0 z-[var(--z-sticky)] flex items-center justify-between border-b border-border/60 bg-background/80 px-4 py-3 backdrop-blur-xl md:hidden">
+      <header className="sticky top-0 z-[var(--z-sticky)] flex items-center justify-between border-b border-border/60 bg-background px-4 py-3 md:hidden">
         <Logo />
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
@@ -173,10 +173,8 @@ export function AppShell({ active = "overview", onNavigate, rail, children }: Ap
         {drawer && (
           <>
             <motion.div
-              className="fixed inset-0 z-[var(--z-overlay)] bg-foreground/30 backdrop-blur-sm md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[var(--z-overlay)] bg-foreground/35 md:hidden"
+              initial={false}
               onClick={() => setDrawer(false)}
             />
             <motion.aside

@@ -22,9 +22,9 @@
   /* surfaces — cool light canvas, white floating cards (the reference's bones) */
   --background:        oklch(0.975 0.006 265);   /* #F4F6FB cool grey-blue canvas */
   --foreground:        oklch(0.27 0.03 257);     /* #1E293B slate ink            */
-  --card:              oklch(1 0 0);             /* #FFFFFF                       */
+  --card:              oklch(0.992 0.003 265);   /* soft off-white, not pure white */
   --card-foreground:   oklch(0.27 0.03 257);
-  --popover:           oklch(1 0 0);
+  --popover:           oklch(0.992 0.003 265);
   --popover-foreground:oklch(0.27 0.03 257);
 
   /* brand — one confident indigo, used for primary action / active nav / focus */
@@ -71,7 +71,7 @@
   --ring:   oklch(0.54 0.22 277);
 
   /* sidebar (floating, glassy) */
-  --sidebar:                     oklch(1 0 0);
+  --sidebar:                     oklch(0.992 0.003 265);
   --sidebar-foreground:          oklch(0.30 0.03 257);
   --sidebar-primary:             oklch(0.54 0.22 277);
   --sidebar-primary-foreground:  oklch(0.985 0 0);

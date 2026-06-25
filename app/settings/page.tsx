@@ -49,8 +49,8 @@ export default function SettingsPage() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ y: 12 }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.4 }}
           className="grid grid-cols-1 gap-5 lg:grid-cols-2"
         >
